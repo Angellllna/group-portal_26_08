@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Файли проєкту "Портал групи"
+media/*
+!media/.gitkeep
+staticfiles/

@@ -1,0 +1,11 @@
+/* Спільні стилі проєкту "Портал групи".
+   Стилі свого модуля клади в окремий файл, наприклад static/css/forum.css,
+   і підключай у своєму шаблоні через блок {% block extra_css %}. */
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.page-title {
+    margin-bottom: 1.5rem;
+}
