@@ -1,25 +1,28 @@
-from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Profile(models.Model):
-    ROLE_CHOICES = [
-        ("cadet", "cadet"),
-        ("instructor", "instructor"),
-        ("admin", "admin"),
-    ]
+class User(AbstractUser):
+    class Role(models.TextChoices):
+        USER = "user", "Користувач"
+        MODERATOR = "moderator", "Модератор"
+        ADMIN = "admin", "Адміністратор"
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="cadet")
-    codename = models.CharField(max_length=100, blank=True, default="")
-    bio = models.TextField(blank=True, default="")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.USER)
 
     class Meta:
-        verbose_name = "Profile"
-        verbose_name_plural = "Profiles"
-        ordering = ["user__username"]
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+        ordering = ["username"]
+
+    def is_moderator_role(self):
+        return self.role == self.Role.MODERATOR
+
+    def is_admin_role(self):
+        return self.role == self.Role.ADMIN or self.is_staff or self.is_superuser
+
+    def can_moderate(self):
+        return self.is_moderator_role() or self.is_admin_role()
 
     def __str__(self):
-        return f"{self.user.username} ({self.role})"
+        return self.username

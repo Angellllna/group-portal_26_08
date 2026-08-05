@@ -1,11 +1,21 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 
-from .models import Profile
+from .models import User
 
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "role", "codename")
+@admin.register(User)
+class UserAdmin(DjangoUserAdmin):
+    list_display = (
+        "username",
+        "first_name",
+        "last_name",
+        "email",
+        "role",
+        "is_active",
+        "is_staff",
+        "is_superuser",
+    )
     list_filter = ("role",)
-    search_fields = ("user__username", "user__email", "codename")
-    ordering = ("user__username",)
+    search_fields = ("username", "first_name", "last_name", "email")
+    ordering = ("username",)
