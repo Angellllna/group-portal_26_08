@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ material.title }}</h1>
+
+<p><strong>Категорія:</strong> {{ material.get_category_display }}</p>
+
+<p><strong>Автор:</strong> {{ material.author }}</p>
+
+<p><strong>Дата:</strong> {{ material.created_at|date:"d.m.Y H:i" }}</p>
+
+<p>{{ material.description }}</p>
+
+<hr>
+
+{% if material.material_type == "file" %}
+
+    {% if material.file %}
+        <p>Файл: {{ material.file.name }}</p>
+
+        <a href="{{ material.file.url }}" download>
+            Завантажити файл
+        </a>
+    {% endif %}
+
+{% elif material.material_type == "image" %}
+
+    {% if material.file %}
+        <img src="{{ material.file.url }}" alt="{{ material.title }}" width="600">
+    {% endif %}
+
+{% elif material.material_type == "link" %}
+
+    <a href="{{ material.link }}" target="_blank">
+        Перейти до ресурсу
+    </a>
+
+{% elif material.material_type == "youtube" %}
+
+    <p>YouTube-відео буде додано на наступному кроці.</p>
+
+{% endif %}
+
+<br><br>
+
+<a href="{% url 'materials:list' %}">
+    ← Назад до матеріалів
+</a>
+
+{% endblock %}0

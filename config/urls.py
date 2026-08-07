@@ -25,6 +25,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path  # noqa: F401  (include знадобиться для модулів нижче)
 from django.views.generic import TemplateView
+from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -32,6 +33,7 @@ urlpatterns = [
     # Той, хто робить модуль core (HOME), видаляє цей рядок і templates/home.html,
     # а замість них розкоментовує path("", include("core.urls")) нижче.
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("materials/", include("materials.urls")),
     # --- Модулі порталу ---
     # path("", include("core.urls")),                            # HOME — головна сторінка
     # path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
