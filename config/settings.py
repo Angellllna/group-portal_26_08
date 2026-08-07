@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "polls",          # POL  — система опитувань
     # "voting",         # VOT  — система голосувань
     # "announcements",  # ANN  — оголошення
-    # "materials",      # MAT  — матеріали
+    "materials",      # MAT  — матеріали
     # "portfolio",      # POR  — портфоліо
     # "gallery",        # GAL  — галерея
 ]
