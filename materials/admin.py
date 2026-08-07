@@ -14,8 +14,12 @@ class MaterialAdmin(admin.ModelAdmin):
     list_filter = (
         "category",
         "is_published",
+        "created_at",
     )
     search_fields = (
         "title",
         "description",
+        "author__username",
     )
+    ordering = ("-created_at",)
+    readonly_fields = ("created_at",)

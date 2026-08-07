@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "materials",
     # --- Модулі порталу ---
     # Створи свій додаток 
     # і після цього розкоментуй рядок свого модуля нижче.
@@ -49,7 +48,7 @@ INSTALLED_APPS = [
     # "polls",          # POL  — система опитувань
     # "voting",         # VOT  — система голосувань
     # "announcements",  # ANN  — оголошення
-    # "materials",      # MAT  — матеріали
+    "materials",      # MAT  — матеріали
     # "portfolio",      # POR  — портфоліо
     # "gallery",        # GAL  — галерея
 ]
