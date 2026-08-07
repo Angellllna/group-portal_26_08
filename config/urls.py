@@ -28,6 +28,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', include('core.urls')),
     # ТИМЧАСОВА головна сторінка-заглушка.
     # Той, хто робить модуль core (HOME), видаляє цей рядок і templates/home.html,
     # а замість них розкоментовує path("", include("core.urls")) нижче.
