@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
+from django.forms.models import BaseInlineFormSet
 
 from .models import (
     Poll,
@@ -9,8 +11,31 @@ from .models import (
     UserAnswer,
 )
 
+class AnswerOptionInlineFormSet(BaseInlineFormSet):
+    """Питання типу single_choice / multiple_choice повинно мати варіанти."""
+
+    def clean(self):
+        super().clean()
+        question_type = self.instance.question_type
+        if question_type not in Question.CHOICE_TYPES:
+            return
+
+        kept = 0
+        for form in self.forms:
+            if not form.cleaned_data or form.cleaned_data.get("DELETE"):
+                continue
+            if form.cleaned_data.get("text"):
+                kept += 1
+
+        if kept == 0:
+            raise ValidationError(
+                "Питання з вибором повинно мати хоча б один варіант відповіді."
+            )
+
+
 class AnswerOptionInline(admin.TabularInline):
     model = AnswerOption
+    formset = AnswerOptionInlineFormSet
     extra = 1
 
 class QuestionInline(admin.StackedInline):

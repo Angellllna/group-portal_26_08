@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "polls",
     # --- Модулі порталу ---
     # Створи свій додаток 
     # і після цього розкоментуй рядок свого модуля нижче.
@@ -46,7 +45,7 @@ INSTALLED_APPS = [
     # "forum",          # FOR  — форум
     # "diary",          # DIA  — електронний щоденник
     # "events",         # EVE  — події та календар подій
-              # POL  — система опитувань
+    "polls",          # POL  — система опитувань
     # "voting",         # VOT  — система голосувань
     # "announcements",  # ANN  — оголошення
     # "materials",      # MAT  — матеріали
