@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Матеріали{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">{{ title }}</h1>
+
+<p class="lead">
+    {{ description }}
+</p>
+
+<hr>
+
+<h3>Категорії</h3>
+
+<ul>
+    {% for category in categories %}
+        <li>
+            {{ category }}
+        </li>
+    {% empty %}
+        <li>
+            Категорій поки немає.
+        </li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>Матеріали</h2>
+
+<div class="row">
+
+    {% for material in materials %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <h3 class="card-title">
+                        {{ material.title }}
+                    </h3>
+
+                    <p>
+                        <strong>Категорія:</strong>
+                        {{ material.get_category_display }}
+                    </p>
+
+                    <p>
+                        <strong>Тип:</strong>
+                        {{ material.get_material_type_display }}
+                    </p>
+
+                    <p>
+                        {{ material.description }}
+                    </p>
+
+                    <p class="text-muted">
+                        {{ material.created_at|date:"d.m.Y H:i" }}
+                    </p>
+
+                    <a
+                        href="{% url 'materials:detail' material.pk %}"
+                        class="btn btn-dark"
+                    >
+                        Переглянути
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="col-12">
+            <p>
+                Навчальні матеріали поки не додані.
+            </p>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% if is_paginated %}
+
+    <nav aria-label="Навігація сторінками">
+
+        <div class="d-flex justify-content-center gap-3">
+
+            {% if page_obj.has_previous %}
+                <a
+                    href="?page={{ page_obj.previous_page_number }}"
+                    class="btn btn-outline-dark"
+                >
+                    ← Назад
+                </a>
+            {% endif %}
+
+            <span class="align-self-center">
+                Сторінка
+                {{ page_obj.number }}
+                з
+                {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a
+                    href="?page={{ page_obj.next_page_number }}"
+                    class="btn btn-outline-dark"
+                >
+                    Далі →
+                </a>
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+{% endif %}
+
+{% endblock %}

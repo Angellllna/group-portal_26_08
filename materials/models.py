@@ -1,6 +1,7 @@
-from django.db import models
-from django.contrib.auth.models import User
 from urllib.parse import urlparse, parse_qs
+
+from django.contrib.auth.models import User
+from django.db import models
 
 
 class Material(models.Model):
@@ -26,6 +27,7 @@ class Material(models.Model):
     )
 
     title = models.CharField(max_length=255)
+
     description = models.TextField()
 
     category = models.CharField(
@@ -50,9 +52,13 @@ class Material(models.Model):
         null=True,
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
-    is_published = models.BooleanField(default=True)
+    is_published = models.BooleanField(
+        default=True
+    )
 
     def __str__(self):
         return self.title
@@ -64,13 +70,17 @@ class Material(models.Model):
 
         parsed = urlparse(self.link)
 
+        # https://www.youtube.com/watch?v=...
         if parsed.hostname in ("www.youtube.com", "youtube.com"):
             video_id = parse_qs(parsed.query).get("v")
+
             if video_id:
                 return f"https://www.youtube.com/embed/{video_id[0]}"
 
+        # https://youtu.be/...
         if parsed.hostname == "youtu.be":
             video_id = parsed.path.lstrip("/")
+
             if video_id:
                 return f"https://www.youtube.com/embed/{video_id}"
 

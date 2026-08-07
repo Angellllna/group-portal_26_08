@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ material.title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+
+    <a
+        href="{% url 'materials:list' %}"
+        class="btn btn-outline-dark"
+    >
+        ← Назад до матеріалів
+    </a>
+
+</div>
+
+
+<h1>{{ material.title }}</h1>
+
+<hr>
+
+
+<p>
+    <strong>Категорія:</strong>
+    {{ material.get_category_display }}
+</p>
+
+
+<p>
+    <strong>Тип:</strong>
+    {{ material.get_material_type_display }}
+</p>
+
+
+<p>
+    <strong>Автор:</strong>
+    {{ material.author.username }}
+</p>
+
+
+<p>
+    <strong>Дата створення:</strong>
+    {{ material.created_at|date:"d.m.Y H:i" }}
+</p>
+
+
+<div class="mt-4">
+
+    <h3>Опис</h3>
+
+    <p>
+        {{ material.description }}
+    </p>
+
+</div>
+
+
+{% if material.material_type == "file" and material.file %}
+
+    <div class="mt-4">
+
+        <a
+            href="{{ material.file.url }}"
+            class="btn btn-dark"
+            target="_blank"
+        >
+            Відкрити файл
+        </a>
+
+    </div>
+
+{% endif %}
+
+
+{% if material.material_type == "image" and material.file %}
+
+    <div class="mt-4">
+
+        <img
+            src="{{ material.file.url }}"
+            alt="{{ material.title }}"
+            class="img-fluid rounded"
+        >
+
+    </div>
+
+{% endif %}
+
+
+{% if material.material_type == "link" and material.link %}
+
+    <div class="mt-4">
+
+        <a
+            href="{{ material.link }}"
+            target="_blank"
+            class="btn btn-dark"
+        >
+            Відкрити посилання
+        </a>
+
+    </div>
+
+{% endif %}
+
+
+{% if material.material_type == "youtube" %}
+
+    {% if material.youtube_embed_url %}
+
+        <div class="mt-4">
+
+            <div class="ratio ratio-16x9">
+
+                <iframe
+                    src="{{ material.youtube_embed_url }}"
+                    title="{{ material.title }}"
+                    allowfullscreen
+                ></iframe>
+
+            </div>
+
+        </div>
+
+    {% elif material.link %}
+
+        <div class="mt-4">
+
+            <a
+                href="{{ material.link }}"
+                target="_blank"
+                class="btn btn-danger"
+            >
+                Відкрити YouTube
+            </a>
+
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

@@ -11,15 +11,21 @@ class MaterialListView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        return Material.objects.filter(is_published=True).order_by("-created_at")
+        return (
+            Material.objects
+            .filter(is_published=True)
+            .order_by("-created_at")
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context["title"] = "Навчальні матеріали"
         context["description"] = "Матеріали Академії"
+
         context["categories"] = (
-            Material.objects.filter(is_published=True)
+            Material.objects
+            .filter(is_published=True)
             .values_list("category", flat=True)
             .distinct()
         )
