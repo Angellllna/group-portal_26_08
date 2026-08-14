@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<h1>{{ poll.title }}</h1>
+
+<h2>{{ page.title }}</h2>
+
+<p>
+    етап {{ page_number }} з {{ page_count }}
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    {% for field in form %}
+
+        <div>
+            {{ field.label }}
+
+            {{ field }}
+
+            {{ field.errors }}
+        </div>
+
+        <br>
+
+    {% endfor %}
+
+    {% if page_number > 1 %}
+
+        <a href="{% url 'polls:poll_page' poll.slug page_number|add:'-1' %}">
+            Назад
+        </a>
+
+    {% endif %}
+
+    {% if page_number < page_count %}
+
+        <button type="submit">
+            Далі
+        </button>
+
+    {% else %}
+
+        <button type="submit">
+            Завершити
+        </button>
+
+    {% endif %}
+
+</form>
+
+{% endblock %}

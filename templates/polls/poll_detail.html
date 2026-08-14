@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<h1>{{ poll.title }}</h1>
+
+<p>{{ poll.description }}</p>
+
+<p>
+    Кількість етапів:
+    {{ poll.pages.count }}
+</p>
+<p>
+    Кількість запитань:
+    {{ questions_count }}
+</p>
+<a href="{% url 'polls:poll_page' poll.slug 1 %}">
+    Почати опитування
+</a>
+
+{% endblock %}

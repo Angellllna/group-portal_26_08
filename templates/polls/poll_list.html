@@ -1,0 +1,44 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<h1>Опитування</h1>
+
+{% for poll in polls %}
+
+    <div>
+        <h2>{{ poll.title }}</h2>
+
+        <p>{{ poll.description }}</p>
+
+        <p>
+            Сторінок: {{ poll.pages.count }}
+        </p>
+
+        <p>
+            Статус:
+            {% if poll.result %}
+                Пройдено
+            {% else %}
+                Не пройдено
+            {% endif %}
+        </p>
+
+        {% if poll.result %}
+            <p>Можна пройти повторно.</p>
+        {% endif %}
+
+        <a href="{% url 'polls:poll_detail' poll.slug %}">
+            Пройти опитування
+        </a>
+    </div>
+
+    <hr>
+
+{% empty %}
+
+    <p>Активних опитувань немає.</p>
+
+{% endfor %}
+
+{% endblock %}
