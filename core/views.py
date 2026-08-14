@@ -1,12 +1,7 @@
-from django.shortcuts import render
-from django.urls import path
-from . import views
+from django.views.generic import TemplateView
 
-urlpatterns = [
-    path('', views.home_page, name='home'),
-]
 
-def home_page(request):
-    return render(request, 'core/index.html')
+class HomePageView(TemplateView):
+    """Головна сторінка порталу."""
 
-# Create your views here.
+    template_name = "core/home.html"
