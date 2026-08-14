@@ -29,7 +29,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # --- Модулі порталу ---
     path("", include("core.urls")),                            # HOME — головна сторінка
-    # path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
+    path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # path("events/", include("events.urls")),                   # EVE  — події та календар
