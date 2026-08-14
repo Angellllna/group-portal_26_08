@@ -201,23 +201,6 @@ pip install <бібліотека>
 pip freeze > requirements.txt
 ```
 
-### 7. Обмеження доступу до сторінок (спільні міксини)
-
-Для сторінок модератора або адміністратора використовуйте:
-`ModeratorOrAdminRequiredMixin`
-
-Лише для адміністратора використовуйте:
-`AdminRequiredMixin`
-
-Імпорт для всіх модулів:
-
-```python
-from accounts.mixins import (
-   AdminRequiredMixin,
-   ModeratorOrAdminRequiredMixin,
-)
-```
-
 ## Модулі проєкту
 
 | Модуль          | Додаток         | Префікс таска |
