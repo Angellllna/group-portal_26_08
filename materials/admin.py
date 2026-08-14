@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Material
 
 
@@ -6,13 +7,15 @@ from .models import Material
 class MaterialAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "author",
         "category",
+        "material_type",
+        "author",
         "created_at",
         "is_published",
     )
     list_filter = (
         "category",
+        "material_type",
         "is_published",
         "created_at",
     )
@@ -23,3 +26,4 @@ class MaterialAdmin(admin.ModelAdmin):
     )
     ordering = ("-created_at",)
     readonly_fields = ("created_at",)
+    prepopulated_fields = {"slug": ("title",)}

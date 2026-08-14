@@ -2,23 +2,26 @@ from django.contrib.auth import get_user_model
 from django.test import Client
 from django.test import TestCase
 from django.test import override_settings
-from django.urls import path, reverse
+from django.urls import include, path, reverse
 from django.views.generic import TemplateView
 
 from .mixins import AdminRequiredMixin, ModeratorOrAdminRequiredMixin
 
 
 class ModeratorOnlyView(ModeratorOrAdminRequiredMixin, TemplateView):
-    template_name = "home.html"
+    template_name = "core/home.html"
 
 
 class AdminOnlyView(AdminRequiredMixin, TemplateView):
-    template_name = "home.html"
+    template_name = "core/home.html"
 
 
 urlpatterns = [
     path("test/moderator/", ModeratorOnlyView.as_view(), name="test-moderator-view"),
     path("test/admin/", AdminOnlyView.as_view(), name="test-admin-view"),
+    # маршрути проєкту потрібні, бо спільні шаблони (навбар) звертаються
+    # до {% url %} інших модулів
+    path("", include("config.urls")),
 ]
 
 class UserModelTests(TestCase):
