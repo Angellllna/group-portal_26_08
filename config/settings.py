@@ -41,14 +41,14 @@ INSTALLED_APPS = [
     # Створи свій додаток 
     # і після цього розкоментуй рядок свого модуля нижче.
     "core",           # HOME — головна сторінка, інформація про групу
-    # "accounts",       # AUTH — автентифікація, профілі, ролі
+    "accounts",       # AUTH — автентифікація, профілі, ролі
     # "forum",          # FOR  — форум
     # "diary",          # DIA  — електронний щоденник
     # "events",         # EVE  — події та календар подій
-    # "polls",          # POL  — система опитувань
+    "polls",          # POL  — система опитувань
     # "voting",         # VOT  — система голосувань
     # "announcements",  # ANN  — оголошення
-    # "materials",      # MAT  — матеріали
+    "materials",      # MAT  — матеріали
     # "portfolio",      # POR  — портфоліо
     # "gallery",        # GAL  — галерея
 ]
@@ -146,6 +146,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Автентифікація: куди перекидати користувача
 # (працюватиме після того, як буде створено додаток accounts)
+
+AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "/"
