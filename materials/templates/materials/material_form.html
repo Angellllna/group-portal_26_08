@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    {% if object %}
+        Редагування матеріалу
+    {% else %}
+        Додавання матеріалу
+    {% endif %}
+</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">
+        {% if object %}
+            Зберегти зміни
+        {% else %}
+            Додати матеріал
+        {% endif %}
+    </button>
+
+    {% if object %}
+        <a href="{{ object.get_absolute_url }}">Скасувати</a>
+    {% else %}
+        <a href="{% url 'materials:material_list' %}">Скасувати</a>
+    {% endif %}
+</form>
+
+{% endblock %}

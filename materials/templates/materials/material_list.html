@@ -1,0 +1,23 @@
+{% for material in materials %}
+
+    <h2>{{ material.title }}</h2>
+
+    <p>{{ material.description }}</p>
+
+    <a href="{% url 'materials:material_detail' material.slug %}">
+        Переглянути
+    </a>
+
+    {% if user.is_authenticated %}
+        {% if user.is_staff or user.groups.filter(name="Moderators").exists %}
+            <a href="{% url 'materials:material_edit' material.slug %}">
+                Редагувати
+            </a>
+
+            <a href="{% url 'materials:material_delete' material.slug %}">
+                Видалити
+            </a>
+        {% endif %}
+    {% endif %}
+
+{% endfor %}
