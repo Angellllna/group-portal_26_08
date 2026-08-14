@@ -1,5 +1,4 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
 from .models import Material
 
@@ -23,12 +22,16 @@ class MaterialListView(ListView):
         context["title"] = "Навчальні матеріали"
         context["description"] = "Матеріали Академії"
 
-        context["categories"] = (
+        # активні категорії — тільки ті, у яких є опубліковані матеріали,
+        # з людськими назвами замість кодів
+        used = set(
             Material.objects
             .filter(is_published=True)
             .values_list("category", flat=True)
-            .distinct()
         )
+        context["categories"] = [
+            label for value, label in Material.Category.choices if value in used
+        ]
 
         return context
 
@@ -38,9 +41,6 @@ class MaterialDetailView(DetailView):
     template_name = "materials/material_detail.html"
     context_object_name = "material"
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(
-            Material,
-            pk=self.kwargs["pk"],
-            is_published=True,
-        )
+    def get_queryset(self):
+        # неопублікований матеріал не відкривається через прямий URL
+        return Material.objects.filter(is_published=True)

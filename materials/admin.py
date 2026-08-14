@@ -13,19 +13,17 @@ class MaterialAdmin(admin.ModelAdmin):
         "created_at",
         "is_published",
     )
-
     list_filter = (
         "category",
         "material_type",
         "is_published",
+        "created_at",
     )
-
     search_fields = (
         "title",
         "description",
         "author__username",
     )
-
-    ordering = (
-        "-created_at",
-    )
+    ordering = ("-created_at",)
+    readonly_fields = ("created_at",)
+    prepopulated_fields = {"slug": ("title",)}

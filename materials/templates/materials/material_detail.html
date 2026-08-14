@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "core/base.html" %}
 
 {% block title %}
     {{ material.title }}
@@ -62,12 +62,20 @@
 
     <div class="mt-4">
 
+        <p>
+            <strong>Файл:</strong>
+            {{ material.file_name }}
+            {% if material.file_extension %}
+                <span class="badge bg-secondary">{{ material.file_extension }}</span>
+            {% endif %}
+        </p>
+
         <a
             href="{{ material.file.url }}"
             class="btn btn-dark"
-            target="_blank"
+            download
         >
-            Відкрити файл
+            Завантажити
         </a>
 
     </div>
@@ -97,9 +105,10 @@
         <a
             href="{{ material.link }}"
             target="_blank"
+            rel="noopener noreferrer"
             class="btn btn-dark"
         >
-            Відкрити посилання
+            Перейти до ресурсу
         </a>
 
     </div>
@@ -132,6 +141,7 @@
             <a
                 href="{{ material.link }}"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="btn btn-danger"
             >
                 Відкрити YouTube

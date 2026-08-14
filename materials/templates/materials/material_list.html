@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "core/base.html" %}
 
 {% block title %}Матеріали{% endblock %}
 
@@ -55,7 +55,7 @@
                     </p>
 
                     <p>
-                        {{ material.description }}
+                        {{ material.description|truncatewords:20 }}
                     </p>
 
                     <p class="text-muted">
@@ -63,7 +63,7 @@
                     </p>
 
                     <a
-                        href="{% url 'materials:detail' material.pk %}"
+                        href="{% url 'materials:detail' material.slug %}"
                         class="btn btn-dark"
                     >
                         Переглянути
