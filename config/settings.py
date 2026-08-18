@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "diary",  # DIA  — електронний щоденник
+    "diary",# DIA  — електронний щоденник
+    "rolepermissions"
     # --- Модулі порталу ---
     # Створи свій додаток 
     # і після цього розкоментуй рядок свого модуля нижче.

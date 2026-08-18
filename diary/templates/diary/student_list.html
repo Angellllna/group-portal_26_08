@@ -1,4 +1,5 @@
-
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,15 +11,19 @@
 <body>
     <h1>Welcome to the Diary Home Page</h1>
     <p>This is a simple home page for the diary application.</p>
-    {% for s in subjects %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
+    {% for s in student %}
+            <div class="card-body" >
+                <hr>
+                <a href="{}">
+                <ul>
                     <li class="list-group-item">{{ s.title }}</li>
                     <li class="list-group-item">{{ s.description }}</li>
+                </ul>
+                </a>
+                <hr>
             </div>
-            </ul>
         </div>
     {% endfor %}
+{% endblock %}
 </body>
 </html>
