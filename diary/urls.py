@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 from .views import DiaryHomeView, SubjectDetailView
 app_name = "diary"
 urlpatterns = [
-    path("",DiaryHomeView.as_view(),name="subject-list"),
+    path(" ",DiaryHomeView.as_view(),name="subject-list"),
     path("subject/<int:pk>/",SubjectDetailView.as_view(),name="subject-detail"),
 ]
 
