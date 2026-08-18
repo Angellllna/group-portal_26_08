@@ -19,7 +19,7 @@
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'polls:poll-list' %}">Опитування</a></li> #}
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'voting:voting-list' %}">Голосування</a></li> #}
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'announcements:announcement-list' %}">Оголошення</a></li> #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'materials:material-list' %}">Матеріали</a></li> #}
+                <li class="nav-item"><a class="nav-link" href="{% url 'materials:list' %}">Матеріали</a></li>
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'portfolio:portfolio-list' %}">Портфоліо</a></li> #}
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'gallery:photo-list' %}">Галерея</a></li> #}
             </ul>
@@ -30,10 +30,16 @@
                         <span class="nav-link">{{ user.username }}</span>
                     </li>
                     {# <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}">Профіль</a></li> #}
-                    {# <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Вийти</a></li> #}
+                    {# вихід лише POST-запитом — GET на /accounts/logout/ повертає 405 #}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'accounts:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link">Вийти</button>
+                        </form>
+                    </li>
                 {% else %}
-                    {# <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Увійти</a></li> #}
-                    {# <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Реєстрація</a></li> #}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Увійти</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Реєстрація</a></li>
                 {% endif %}
             </ul>
         </div>

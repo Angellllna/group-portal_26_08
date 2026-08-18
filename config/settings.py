@@ -42,14 +42,14 @@ INSTALLED_APPS = [
     # --- Модулі порталу ---
     # Створи свій додаток 
     # і після цього розкоментуй рядок свого модуля нижче.
-    # "core",           # HOME — головна сторінка, інформація про групу
-    # "accounts",       # AUTH — автентифікація, профілі, ролі
+    "core",           # HOME — головна сторінка, інформація про групу
+    "accounts",       # AUTH — автентифікація, профілі, ролі
     # "forum",          # FOR  — форум
     # "events",         # EVE  — події та календар подій
-    # "polls",          # POL  — система опитувань
+    "polls",          # POL  — система опитувань
     # "voting",         # VOT  — система голосувань
     # "announcements",  # ANN  — оголошення
-    # "materials",      # MAT  — матеріали
+    "materials",      # MAT  — матеріали
     # "portfolio",      # POR  — портфоліо
     # "gallery",        # GAL  — галерея
 ]
@@ -148,9 +148,11 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Автентифікація: куди перекидати користувача
 # (працюватиме після того, як буде створено додаток accounts)
 
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+AUTH_USER_MODEL = "accounts.User"
+
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
 
 
 # Default primary key field type
