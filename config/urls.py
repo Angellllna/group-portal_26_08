@@ -27,10 +27,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # ТИМЧАСОВА головна сторінка-заглушка.
-    # Той, хто робить модуль core (HOME), видаляє цей рядок і templates/home.html,
-    # а замість них розкоментовує path("", include("core.urls")) нижче.
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # --- Модулі порталу ---
     path("", include("core.urls")),                            # HOME — головна сторінка
