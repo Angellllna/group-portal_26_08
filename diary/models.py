@@ -6,9 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 
 
-def title_validate(title):
-    if " " in title:
-        raise ValidationError(gettext_lazy("Назва предмету не повинна містити пробілів"))
+
 # Create your models here.
 
 class Subject(models.Model):
@@ -16,7 +14,7 @@ class Subject(models.Model):
         ("secondary", "Secondary"),
         ("main", "Main"),
     ]
-    title = models.CharField(max_length=150,blank=False,null=False,validators=[title_validate])
+    title = models.CharField(max_length=150,blank=False,null=False)
     description = models.TextField(max_length=500,blank=True,null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,8 +29,8 @@ class Subject(models.Model):
 class Grade(models.Model):
     value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)],blank=True,null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE,related_name="student")
-    created_by = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="student")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     comment = models.TextField(max_length=500,blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
