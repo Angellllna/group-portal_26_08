@@ -33,7 +33,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("events/", include("events.urls")),                   # EVE  — події та календар
-    # path("polls/", include("polls.urls")),                     # POL  — опитування
+    path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
     path("materials/", include("materials.urls")),             # MAT  — матеріали

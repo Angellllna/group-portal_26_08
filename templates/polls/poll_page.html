@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ poll.title }} — етап {{ page_number }}{% endblock %}
+
+{% block content %}
+    <h1 class="page-title h3">{{ poll.title }}</h1>
+
+    <h2 class="h5 text-muted">{{ page.title }}</h2>
+
+    <p class="small text-muted">Етап {{ page_number }} з {{ page_count }}</p>
+
+    <div class="progress mb-4" style="height: .5rem;">
+        <div class="progress-bar"
+             role="progressbar"
+             style="width: {% widthratio page_number page_count 100 %}%"
+             aria-valuenow="{{ page_number }}"
+             aria-valuemin="0"
+             aria-valuemax="{{ page_count }}"></div>
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+            <fieldset class="mb-4">
+                <legend class="h6">
+                    {{ field.label }}
+                    {% if field.field.required %}
+                        <span class="text-danger" title="обов'язкове питання">*</span>
+                    {% endif %}
+                </legend>
+
+                {{ field }}
+
+                {% for error in field.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </fieldset>
+        {% empty %}
+            <p class="text-muted">На цьому етапі немає запитань.</p>
+        {% endfor %}
+
+        <div class="d-flex gap-2">
+            {% if page_number > 1 %}
+                <a href="{% url 'polls:poll_page' poll.slug page_number|add:'-1' %}"
+                   class="btn btn-outline-secondary">
+                    Назад
+                </a>
+            {% endif %}
+
+            {% if page_number < page_count %}
+                <button type="submit" class="btn btn-primary">Далі</button>
+            {% else %}
+                <button type="submit" class="btn btn-success">Завершити</button>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

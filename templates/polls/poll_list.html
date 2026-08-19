@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+
+{% block title %}Опитування{% endblock %}
+
+{% block content %}
+    <h1 class="page-title mb-4">Опитування</h1>
+
+    <div class="row row-cols-1 row-cols-lg-2 g-3">
+        {% for poll in polls %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">{{ poll.title }}</h2>
+
+                        <p class="card-text text-muted">{{ poll.description }}</p>
+
+                        <ul class="list-unstyled small mb-3">
+                            <li>Етапів: {{ poll.pages_count }}</li>
+                            <li>Запитань: {{ poll.questions_count }}</li>
+                            <li>
+                                Статус:
+                                {% if poll.id in passed_ids %}
+                                    <span class="badge text-bg-success">пройдено</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">не пройдено</span>
+                                {% endif %}
+                            </li>
+                            <li>
+                                Повторне проходження:
+                                {% if poll.allow_retake %}дозволено{% else %}заборонено{% endif %}
+                            </li>
+                        </ul>
+
+                        {% if poll.id in passed_ids and not poll.allow_retake %}
+                            <a href="{% url 'polls:poll_detail' poll.slug %}"
+                               class="btn btn-outline-secondary">
+                                Переглянути результат
+                            </a>
+                        {% else %}
+                            <a href="{% url 'polls:poll_detail' poll.slug %}" class="btn btn-primary">
+                                Пройти опитування
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p class="text-muted">Активних опитувань немає.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
