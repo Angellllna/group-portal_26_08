@@ -27,16 +27,16 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # --- Модулі порталу ---
     path("", include("core.urls")),                            # HOME — головна сторінка
-    # path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
+    path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
-    # path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # path("events/", include("events.urls")),                   # EVE  — події та календар
     # path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
-    # path("materials/", include("materials.urls")),             # MAT  — матеріали
+    path("materials/", include("materials.urls")),             # MAT  — матеріали
     # path("portfolio/", include("portfolio.urls")),             # POR  — портфоліо
     # path("gallery/", include("gallery.urls")),                 # GAL  — галерея
 ]

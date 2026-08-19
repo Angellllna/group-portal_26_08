@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client
 from django.test import TestCase
 from django.test import override_settings
-from django.urls import path, reverse
+from django.urls import include, path, reverse
 from django.views.generic import TemplateView
 
 from .mixins import AdminRequiredMixin, ModeratorOrAdminRequiredMixin
@@ -19,6 +19,9 @@ class AdminOnlyView(AdminRequiredMixin, TemplateView):
 urlpatterns = [
     path("test/moderator/", ModeratorOnlyView.as_view(), name="test-moderator-view"),
     path("test/admin/", AdminOnlyView.as_view(), name="test-admin-view"),
+    # маршрути проєкту потрібні, бо спільні шаблони (навбар) звертаються
+    # до {% url %} інших модулів
+    path("", include("config.urls")),
 ]
 
 class UserModelTests(TestCase):
@@ -170,3 +173,80 @@ class AccessMixinsTests(TestCase):
 
         self.assertEqual(moderator_response.status_code, 200)
         self.assertEqual(admin_response.status_code, 200)
+
+
+class RegisterViewTests(TestCase):
+    def test_register_creates_user_with_role_user(self):
+        response = self.client.post(
+            reverse("accounts:register"),
+            {
+                "username": "newuser",
+                "first_name": "New",
+                "last_name": "User",
+                "email": "newuser@example.com",
+                "password1": "Str0ng!Pass#99",
+                "password2": "Str0ng!Pass#99",
+            },
+        )
+
+        self.assertRedirects(response, reverse("accounts:login"))
+        user = get_user_model().objects.get(username="newuser")
+        self.assertEqual(user.role, get_user_model().Role.USER)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+
+    def test_register_role_cannot_be_set_via_post(self):
+        self.client.post(
+            reverse("accounts:register"),
+            {
+                "username": "hacker",
+                "email": "hacker@example.com",
+                "password1": "Str0ng!Pass#99",
+                "password2": "Str0ng!Pass#99",
+                "role": "admin",
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+
+        user = get_user_model().objects.filter(username="hacker").first()
+        if user:
+            self.assertEqual(user.role, get_user_model().Role.USER)
+            self.assertFalse(user.is_staff)
+            self.assertFalse(user.is_superuser)
+
+    def test_register_page_loads(self):
+        response = self.client.get(reverse("accounts:register"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "accounts/register.html")
+
+
+class LoginLogoutViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="loginuser",
+            email="loginuser@example.com",
+            password="Str0ng!Pass#99",
+        )
+
+    def test_login_page_loads(self):
+        response = self.client.get(reverse("accounts:login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "accounts/login.html")
+
+    def test_login_redirects_on_success(self):
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"username": "loginuser", "password": "Str0ng!Pass#99"},
+        )
+
+        self.assertRedirects(response, reverse("home"))
+
+    def test_logout_redirects_to_home(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(reverse("accounts:logout"))
+
+        self.assertRedirects(response, reverse("home"))
