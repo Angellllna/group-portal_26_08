@@ -1,0 +1,26 @@
+/* Стилі головної сторінки (HOME-2). Решта сайту — static/css/style.css */
+
+.home-hero {
+    color: #fff;
+    background-color: #1b1f24;
+    background-image: linear-gradient(rgba(17, 20, 24, .82), rgba(17, 20, 24, .82)),
+                      url("../images/kazzik.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.home-hero .lead {
+    /* довгий текст не повинен зливатися з фоном і розповзатися на весь екран */
+    max-width: 60ch;
+}
+
+.home-hero__img {
+    max-width: 220px;
+    border: 4px solid rgba(255, 255, 255, .25);
+}
+
+/* довгі слова переносяться, а не вилазять за межі картки */
+.card-title,
+.card-text {
+    overflow-wrap: anywhere;
+}

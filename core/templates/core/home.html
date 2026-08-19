@@ -1,12 +1,201 @@
 {% extends "core/base.html" %}
+{% load static %}
 
 {% block title %}Антиказино — головна{% endblock %}
 
-{% block content %}
-    <h1 class="page-title">Антиказино: гра, у якій завжди виграє система</h1>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
-    <p class="lead">
-        Освітній портал про азартні механіки, психологічні маніпуляції,
-        цифрову безпеку та фінансову грамотність.
-    </p>
+{% block content %}
+    {# маршрут опитувань з'явиться в таску POL-2; `as` не падає, поки його немає #}
+    {% url 'polls:poll_list' as polls_url %}
+
+    {# ---------- HERO ---------- #}
+    <section class="home-hero rounded-3 p-4 p-lg-5 mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold mb-3">
+                    Антиказино: гра, у якій завжди виграє система
+                </h1>
+
+                <p class="lead mb-4">
+                    Освітній портал про азартні механіки, психологічні маніпуляції,
+                    цифрову безпеку та фінансову грамотність. Ми показуємо, як влаштовані
+                    ігри на удачу — щоб ти впізнавав ці прийоми й не купувався на них.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{% url 'materials:list' %}" class="btn btn-primary btn-lg">
+                        Дізнатися більше
+                    </a>
+                    <a href="{{ polls_url|default:'#' }}"
+                       class="btn btn-outline-light btn-lg{% if not polls_url %} disabled{% endif %}">
+                        Перевірити свої знання
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <img src="{% static 'images/kazzik.jpg' %}"
+                     alt="Емблема порталу «Антиказино»"
+                     class="img-fluid rounded-circle home-hero__img">
+            </div>
+        </div>
+    </section>
+
+    {# ---------- ПРО ПРОЄКТ ---------- #}
+    <section class="mb-5">
+        <h2 class="h3 mb-3">Про проєкт</h2>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Це <strong>не справжнє казино</strong>.</li>
+                    <li class="list-group-item">Тут <strong>не використовуються справжні гроші</strong>.</li>
+                    <li class="list-group-item">Портал створений для <strong>навчання</strong>.</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Пояснює <strong>принцип роботи азартних механік</strong>.</li>
+                    <li class="list-group-item">Допомагає <strong>розпізнавати маніпуляції</strong>.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- ЩО МОЖНА ЗНАЙТИ ---------- #}
+    <section class="mb-5">
+        <h2 class="h3 mb-3">Що можна знайти на порталі</h2>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            <div class="col">
+                <a href="{% url 'materials:list' %}" class="card h-100 text-decoration-none text-reset">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Навчальні матеріали</h3>
+                        <p class="card-text text-muted mb-0">
+                            Статті, файли та відео про азартні механіки й цифрову безпеку.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="{{ polls_url|default:'#' }}" class="card h-100 text-decoration-none text-reset">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Тематичні опитування</h3>
+                        <p class="card-text text-muted mb-0">
+                            Перевір, чи розпізнаєш ти маніпуляцію казино.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Форум</h3>
+                        <p class="card-text text-muted mb-0">
+                            Обговорення тем порталу. <span class="badge text-bg-secondary">скоро</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Учнівські роботи</h3>
+                        <p class="card-text text-muted mb-0">
+                            Портфоліо проєктів групи. <span class="badge text-bg-secondary">скоро</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Галерея</h3>
+                        <p class="card-text text-muted mb-0">
+                            Фото з подій та занять. <span class="badge text-bg-secondary">скоро</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="h5 card-title">Календар подій</h3>
+                        <p class="card-text text-muted mb-0">
+                            Що і коли відбувається у групі. <span class="badge text-bg-secondary">скоро</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- ЧОМУ ЦЕ ВАЖЛИВО ---------- #}
+    <section class="mb-5">
+        <h2 class="h3 mb-3">Чому важливо знати про азартні механіки</h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-3">
+            <div class="col">
+                <div class="card h-100 border-danger-subtle">
+                    <div class="card-body">
+                        <h3 class="h6 card-title">Ефект майже виграшу</h3>
+                        <p class="card-text small text-muted mb-0">
+                            Програш «на один символ» мозок зчитує майже як перемогу —
+                            і підштовхує спробувати ще раз.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-danger-subtle">
+                    <div class="card-body">
+                        <h3 class="h6 card-title">Випадкові винагороди</h3>
+                        <p class="card-text small text-muted mb-0">
+                            Непередбачуваний приз затягує сильніше за передбачуваний:
+                            саме на цьому побудовані лутбокси.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-danger-subtle">
+                    <div class="card-body">
+                        <h3 class="h6 card-title">Бажання відігратися</h3>
+                        <p class="card-text small text-muted mb-0">
+                            Після втрати здається, що наступна ставка все поверне.
+                            Насправді вона лише збільшує втрату.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-danger-subtle">
+                    <div class="card-body">
+                        <h3 class="h6 card-title">Маніпулятивна реклама</h3>
+                        <p class="card-text small text-muted mb-0">
+                            Реклама показує переможців і ховає статистику.
+                            Виграє завжди той, хто тримає банк.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- ПОПЕРЕДЖЕННЯ ---------- #}
+    <div class="alert alert-warning mb-0" role="alert">
+        Усі ігрові механіки на цьому порталі мають виключно навчальну мету.
+        Справжні гроші не використовуються.
+    </div>
 {% endblock %}
