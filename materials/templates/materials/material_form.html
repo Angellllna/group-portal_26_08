@@ -1,33 +1,59 @@
-{% extends "base.html" %}
+{% extends "core/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
 
-<h1>
-    {% if object %}
-        Редагування матеріалу
-    {% else %}
-        Додавання матеріалу
-    {% endif %}
-</h1>
+<h1 class="page-title mb-4">{{ page_title }}</h1>
 
-<form method="post" enctype="multipart/form-data">
+{# enctype обов'язковий: без нього файл і зображення не долітають на сервер #}
+<form method="post" enctype="multipart/form-data" novalidate>
+
     {% csrf_token %}
 
-    {{ form.as_p }}
-
-    <button type="submit">
-        {% if object %}
-            Зберегти зміни
-        {% else %}
-            Додати матеріал
-        {% endif %}
-    </button>
-
-    {% if object %}
-        <a href="{{ object.get_absolute_url }}">Скасувати</a>
-    {% else %}
-        <a href="{% url 'materials:material_list' %}">Скасувати</a>
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
     {% endif %}
+
+    {% for field in form %}
+        <div class="mb-3">
+
+            <label for="{{ field.id_for_label }}" class="form-label">
+                {{ field.label }}
+                {% if field.field.required %}
+                    <span class="text-danger">*</span>
+                {% endif %}
+            </label>
+
+            {{ field }}
+
+            {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+
+            {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+
+        </div>
+    {% endfor %}
+
+    <div class="d-flex gap-2">
+
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+
+        {% if object %}
+            <a href="{% url 'materials:detail' object.slug %}" class="btn btn-outline-secondary">
+                Скасувати
+            </a>
+        {% else %}
+            <a href="{% url 'materials:list' %}" class="btn btn-outline-secondary">
+                Скасувати
+            </a>
+        {% endif %}
+
+    </div>
+
 </form>
 
 {% endblock %}
