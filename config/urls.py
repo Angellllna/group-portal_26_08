@@ -33,7 +33,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("events/", include("events.urls")),                   # EVE  — події та календар
-    path("poll/", include("polls.urls")),
+    path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
     path("materials/", include("materials.urls")),             # MAT  — матеріали
@@ -45,6 +45,3 @@ urlpatterns = [
 # На продакшені медіа роздає вебсервер (nginx тощо), а не Django.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-    from django.urls import path, include
-
