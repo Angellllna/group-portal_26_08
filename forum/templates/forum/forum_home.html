@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Головна</a></li>
+    <li class="breadcrumb-item active">Форум</li>
+  </ol>
+</nav>
+
+<h1>Форум</h1>
+<p>Ласкаво просимо на наш форум!</p>
+
+<div class="list-group">
+  {% for category in categories %}
+    <a href="{% url 'forum:category_detail' category.slug %}" class="list-group-item list-group-item-action">
+      <h5>{{ category.title }}</h5>
+      <p>{{ category.description }}</p>
+      <small>
+        Гілок: {{ category.threads_count }} | 
+        Повідомлень: {{ category.posts_count }} | 
+        Остання активність: {{ category.last_activity|default:"Немає" }}
+      </small>
+    </a>
+  {% empty %}
+    <p>Категорій поки немає.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Головна</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'forum:home' %}">Форум</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'forum:category_detail' thread.category.slug %}">{{ thread.category.title }}</a></li>
+    <li class="breadcrumb-item active">{{ thread.title }}</li>
+  </ol>
+</nav>
+
+<h2>{{ thread.title }}</h2>
+<p class="text-muted">Автор: {{ thread.author }} | Створено: {{ thread.created_at|date:"d.m.Y H:i" }}</p>
+<p>{{ thread.description }}</p>
+
+<hr>
+<h3>Повідомлення</h3>
+
+{% for post in posts %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <p>{{ post.text }}</p>
+      <small class="text-muted">
+        Автор: {{ post.author }} | Опубліковано: {{ post.created_at|date:"d.m.Y H:i" }}
+        {% if post.updated_at > post.created_at %}
+          <em>(редаговано)</em>
+        {% endif %}
+      </small>
+    </div>
+  </div>
+{% empty %}
+  <p>Немає повідомлень.</p>
+{% endfor %}
+
+{% if posts.has_other_pages %}
+<nav>
+  <ul class="pagination">
+    {% if posts.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Назад</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Сторінка {{ posts.number }} з {{ posts.paginator.num_pages }}</span></li>
+    {% if posts.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Далі</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}
