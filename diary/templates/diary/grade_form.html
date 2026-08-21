@@ -1,11 +1,9 @@
 {% extends "core/base.html" %}
 
-{% block title %}Виставити оцінку{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
-
-<h1 class="page-title mb-4">Виставити оцінку</h1>
-
+<h1 class="page-title mb-4"></h1>
 <form method="post" novalidate>
 
     {% csrf_token %}
@@ -39,5 +37,4 @@
     </div>
 
 </form>
-
 {% endblock %}

@@ -26,6 +26,9 @@
         <a href="{% url 'diary:grade_add' %}?student={{ student.pk }}" class="btn btn-primary">
             Виставити оцінку
         </a>
+        <a href="{% url 'diary:grade_delete' grade.pk %}" class="btn btn-primary">
+            Видалити оцінку
+        </a>
     {% endif %}
 
 </div>
@@ -74,6 +77,14 @@
                                         <span class="text-muted">—</span>
                                     {% endif %}
                                 </td>
+                                {% if can_add_grade %}
+                                    <td class="text-center">
+                                        <a href="{% url 'diary:grade_update' grade.pk%}">оновити</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'diary:grade_update' grade.pk%}">видалити</a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>

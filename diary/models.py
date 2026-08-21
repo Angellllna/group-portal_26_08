@@ -33,9 +33,9 @@ class Grade(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="grades")
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,related_name="created_grades")
     comment = models.TextField(max_length=500,blank=True,null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    grade_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True,blank=True)
+    grade_at = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     class Meta:
         verbose_name = "оцінки"
         verbose_name_plural = "оцінки"

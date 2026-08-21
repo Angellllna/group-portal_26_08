@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Avg, Count
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView,UpdateView,DeleteView
 
 from accounts.mixins import AdminRequiredMixin
 
@@ -139,8 +139,31 @@ class GradeCreateView(AdminRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("diary:student_grades", args=[self.object.student_id])
+class GradeUpdateView(AdminRequiredMixin,UpdateView):
+    model = Grade
+    form_class = GradeForm
+    template_name = "diary/grade_form.html"
+    context_object_name = 'grade'
+    def handle_no_permission(self):
+            if self.request.user.is_authenticated:
+                messages.error(self.request, "Виставляти оцінки може лише адміністратор.")
+    
+            return super().handle_no_permission()
+    def form_valid(self, form):
+            # автор оцінки береться з запиту, а не з форми
+            form.instance.created_by = self.request.user
+    
+            response = super().form_valid(form)
+    
+            messages.success(self.request, "Оцінку виставлено.")
+    
+            return response
+    def get_success_url(self):
+            return reverse("diary:student_grades", args=[self.object.student_id])
 
-
+class GradeDeleteView(AdminRequiredMixin,DeleteView):
+    model = Grade
+    template_name = 'diary/grade_delete.html'
 class SubjectDetailView(LoginRequiredMixin, DetailView):
     model = Subject
     template_name = "diary/subject_detail.html"
