@@ -164,6 +164,8 @@ class GradeUpdateView(AdminRequiredMixin,UpdateView):
 class GradeDeleteView(AdminRequiredMixin,DeleteView):
     model = Grade
     template_name = 'diary/grade_delete.html'
+    success_url = reverse_lazy("diary:student_list")
+
 class SubjectDetailView(LoginRequiredMixin, DetailView):
     model = Subject
     template_name = "diary/subject_detail.html"
