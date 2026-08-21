@@ -1,10 +1,12 @@
 {# Головне меню сайту. #}
-{# Коли твій модуль готовий — розкоментуй свій пункт меню. #}
-{# УВАГА: {% url %} падає з помилкою, якщо такого маршруту ще немає, #}
-{# тому не розкоментовуй пункт раніше, ніж додав свій app у config/urls.py. #}
+{# У меню перелічені всі модулі проєкту. Модуль, якого ще немає в config/urls.py, #}
+{# показується неактивним пунктом: {% url %} падає з NoReverseMatch, поки маршруту #}
+{# не існує. Коли твій модуль готовий — заміни <span class="nav-link disabled"> #}
+{# на <a class="nav-link" href="{% url '...' %}">. #}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
 
+        {# HOME — головна сторінка #}
         <a class="navbar-brand" href="{% url 'home' %}"
            {% if request.path == '/' %}aria-current="page"{% endif %}>Портал групи</a>
 
@@ -19,32 +21,48 @@
 
             <ul class="navbar-nav me-auto">
 
-                {# окремого пункту «Головна» немає: на головну веде бренд «Портал групи» #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'forum:thread-list' %}">Форум</a></li> #}
+                {# FOR — форум #}
+                <li class="nav-item">
+                    <span class="nav-link disabled" aria-disabled="true"
+                          title="Модуль у розробці">Форум</span>
+                    {# готово: <a class="nav-link" href="{% url 'forum:thread-list' %}">Форум</a> #}
+                </li>
 
+                {# POL — система опитувань #}
                 <li class="nav-item">
                     <a class="nav-link{% if '/polls/' in request.path %} active{% endif %}"
                        href="{% url 'polls:poll_list' %}">Опитування</a>
                 </li>
 
+                {# DIA — електронний щоденник #}
                 <li class="nav-item">
                     <a class="nav-link{% if '/diary/' in request.path %} active{% endif %}"
                        href="{% url 'diary:student_list' %}">Щоденник</a>
                 </li>
 
+                {# MAT — матеріали #}
                 <li class="nav-item">
                     <a class="nav-link{% if '/materials/' in request.path %} active{% endif %}"
                        href="{% url 'materials:list' %}">Матеріали</a>
                 </li>
 
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'portfolio:portfolio-list' %}">Портфоліо</a></li> #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'gallery:photo-list' %}">Галерея</a></li> #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'events:event-list' %}">Події</a></li> #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'announcements:announcement-list' %}">Оголошення</a></li> #}
-                {# <li class="nav-item"><a class="nav-link" href="{% url 'voting:voting-list' %}">Голосування</a></li> #}
+                {# POR — портфоліо #}
+                <li class="nav-item">
+                    <span class="nav-link disabled" aria-disabled="true"
+                          title="Модуль у розробці">Портфоліо</span>
+                    {# готово: <a class="nav-link" href="{% url 'portfolio:portfolio-list' %}">Портфоліо</a> #}
+                </li>
+
+                {# GAL — галерея #}
+                <li class="nav-item">
+                    <span class="nav-link disabled" aria-disabled="true"
+                          title="Модуль у розробці">Галерея</span>
+                    {# готово: <a class="nav-link" href="{% url 'gallery:photo-list' %}">Галерея</a> #}
+                </li>
 
             </ul>
 
+            {# AUTH — система автентифікації #}
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
