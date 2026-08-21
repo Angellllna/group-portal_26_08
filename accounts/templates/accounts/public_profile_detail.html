@@ -3,12 +3,37 @@
 {% block title %}Профіль {{ object.username }}{% endblock %}
 
 {% block content %}
-  <h1>Профіль {{ object.username }}</h1>
-  <dl>
-    <dt>Username</dt><dd>{{ object.username }}</dd>
-    <dt>Ім'я</dt><dd>{{ object.first_name|default:"Не вказано" }}</dd>
-    <dt>Прізвище</dt><dd>{{ object.last_name|default:"Не вказано" }}</dd>
-    <dt>Роль</dt><dd>{{ object.get_role_display }}</dd>
-    <dt>Дата приєднання</dt><dd>{{ object.date_joined }}</dd>
-  </dl>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+
+    <h1 class="mb-4">Профіль {{ object.username }}</h1>
+
+    <div class="card">
+      <div class="card-body">
+        {# приватні дані (email, останній вхід) тут навмисно не показуються #}
+        <dl class="row mb-0">
+
+          <dt class="col-sm-4">Username</dt>
+          <dd class="col-sm-8">{{ object.username }}</dd>
+
+          <dt class="col-sm-4">Ім'я</dt>
+          <dd class="col-sm-8">{{ object.first_name|default:"Не вказано" }}</dd>
+
+          <dt class="col-sm-4">Прізвище</dt>
+          <dd class="col-sm-8">{{ object.last_name|default:"Не вказано" }}</dd>
+
+          <dt class="col-sm-4">Роль</dt>
+          <dd class="col-sm-8">
+            <span class="badge text-bg-secondary">{{ object.get_role_display }}</span>
+          </dd>
+
+          <dt class="col-sm-4">Дата приєднання</dt>
+          <dd class="col-sm-8 mb-0">{{ object.date_joined|date:"d.m.Y" }}</dd>
+
+        </dl>
+      </div>
+    </div>
+
+  </div>
+</div>
 {% endblock %}

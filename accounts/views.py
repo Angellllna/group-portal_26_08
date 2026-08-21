@@ -66,3 +66,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 class PublicProfileDetailView(DetailView):
     model = User
     template_name = "accounts/public_profile_detail.html"
+
+    def get_queryset(self):
+        # деактивований акаунт не показуємо навіть за прямим посиланням
+        return User.objects.filter(is_active=True)
