@@ -1,12 +1,13 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
-from .forms import ProfileUpdateForm, RegisterForm
+from .forms import AccountLoginForm, ProfileUpdateForm, RegisterForm
 from .models import User
 
 
@@ -25,6 +26,7 @@ class RegisterView(CreateView):
 
 
 class AccountLoginView(LoginView):
+    authentication_form = AccountLoginForm
     template_name = "accounts/login.html"
 
     def form_valid(self, form):
@@ -38,6 +40,20 @@ class AccountLogoutView(LogoutView):
         if request.user.is_authenticated:
             messages.success(request, "Ви вийшли з акаунта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class AccountPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = "accounts/password_change_form.html"
+    success_url = reverse_lazy("accounts:password-change-done")
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Пароль успішно змінено.")
+        return response
+
+
+class AccountPasswordChangeDoneView(LoginRequiredMixin, TemplateView):
+    template_name = "accounts/password_change_done.html"
 
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):

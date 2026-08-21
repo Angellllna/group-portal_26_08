@@ -1,4 +1,9 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+{% endblock %}
 
 {% block title %}Профіль {{ object.username }}{% endblock %}
 
@@ -24,7 +29,7 @@
 
           <dt class="col-sm-4">Роль</dt>
           <dd class="col-sm-8">
-            <span class="badge text-bg-secondary">{{ object.get_role_display }}</span>
+            <span class="role-badge role-badge--{{ object.role }}">{{ object.get_role_display }}</span>
           </dd>
 
           <dt class="col-sm-4">Дата приєднання</dt>

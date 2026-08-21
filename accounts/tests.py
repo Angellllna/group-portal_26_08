@@ -245,12 +245,70 @@ class LoginLogoutViewTests(TestCase):
 
         self.assertRedirects(response, reverse("home"))
 
+    def test_login_shows_wrong_password_message(self):
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"username": "loginuser", "password": "WrongPassword#99"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Неправильний пароль.")
+
+    def test_login_shows_unknown_account_message(self):
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"username": "missing-user", "password": "WrongPassword#99"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Такого акаунта не існує.")
+
     def test_logout_redirects_to_home(self):
         self.client.force_login(self.user)
 
         response = self.client.post(reverse("accounts:logout"))
 
         self.assertRedirects(response, reverse("home"))
+
+    def test_authenticated_navbar_shows_user_profile_role_and_logout(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(response, "loginuser")
+        self.assertContains(response, "Користувач")
+        self.assertContains(response, reverse("accounts:profile"))
+        self.assertContains(response, reverse("accounts:logout"))
+        self.assertNotContains(response, "Зареєструватися")
+
+    def test_anonymous_navbar_shows_login_and_registration(self):
+        response = self.client.get(reverse("home"))
+
+        self.assertContains(response, reverse("accounts:login"))
+        self.assertContains(response, reverse("accounts:register"))
+        self.assertNotContains(response, "loginuser")
+
+    def test_password_change_keeps_user_authenticated(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("accounts:password-change"),
+            {
+                "old_password": "Str0ng!Pass#99",
+                "new_password1": "NewStr0ng!Pass#77",
+                "new_password2": "NewStr0ng!Pass#77",
+            },
+        )
+
+        self.assertRedirects(response, reverse("accounts:password-change-done"))
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+        self.assertTrue(self.client.login(username="loginuser", password="NewStr0ng!Pass#77"))
+
+    def test_password_change_requires_authentication(self):
+        response = self.client.get(reverse("accounts:password-change"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("accounts:login"), response.url)
 
 
 class ProfileViewTests(TestCase):

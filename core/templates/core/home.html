@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+    <script src="{% static 'js/accounts.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     {# маршрут опитувань з'явиться в таску POL-2; `as` не падає, поки його немає #}
     {% url 'polls:poll_list' as polls_url %}

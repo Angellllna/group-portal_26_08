@@ -1,0 +1,180 @@
+.auth-panel {
+    max-width: 42rem;
+    margin: 2rem auto;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: #ffffff;
+    border: 1px solid #dce3ea;
+    border-radius: 0.75rem;
+    box-shadow: 0 1rem 2.5rem rgba(20, 39, 58, 0.08);
+}
+
+.auth-panel--compact {
+    max-width: 34rem;
+}
+
+.auth-panel__header {
+    margin-bottom: 1.5rem;
+}
+
+.auth-panel__header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.auth-panel__header p:last-child {
+    color: #607080;
+    margin-bottom: 0;
+}
+
+.auth-panel__eyebrow {
+    color: #0d6efd;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.auth-form__field {
+    margin-bottom: 1rem;
+}
+
+.auth-form__field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.login-vault {
+    margin: 0 auto 1.5rem;
+    text-align: center;
+}
+
+.login-vault__wheels {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.login-vault__wheel {
+    align-items: center;
+    background: #17212b;
+    border: 2px solid #3a4a59;
+    border-radius: 0.5rem;
+    color: #f4c95d;
+    display: flex;
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    font-weight: 800;
+    height: clamp(3.5rem, 16vw, 4.5rem);
+    justify-content: center;
+    overflow: hidden;
+    width: clamp(3.5rem, 16vw, 4.5rem);
+}
+
+.login-vault__status {
+    color: #607080;
+    font-size: 0.85rem;
+    margin: 0.65rem 0 0;
+}
+
+.login-vault.is-spinning .login-vault__wheel {
+    animation: vault-pulse 0.22s ease-in-out infinite alternate;
+    border-color: #f4c95d;
+}
+
+.login-vault.is-failed .login-vault__wheel {
+    background: #3a1f27;
+    border-color: #dc3545;
+    color: #ff8f9b;
+}
+
+.login-vault.is-failed .login-vault__status {
+    color: #b02a37;
+    font-weight: 700;
+}
+
+.login-vault.is-success .login-vault__wheel {
+    background: #163c2c;
+    border-color: #3ddc97;
+    color: #b9efd4;
+}
+
+.login-vault.is-success .login-vault__status {
+    color: #26734d;
+    font-weight: 700;
+}
+
+.login-success-notice {
+    animation: notice-in 0.35s ease-out both;
+    background: #163c2c;
+    border: 1px solid #3ddc97;
+    border-radius: 0.75rem;
+    bottom: 1.25rem;
+    color: #effff7;
+    display: grid;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem;
+    position: fixed;
+    right: 1.25rem;
+    z-index: 1050;
+}
+
+.login-success-notice span {
+    color: #b9efd4;
+    font-size: 0.85rem;
+}
+
+@keyframes vault-pulse {
+    from { transform: translateY(0); }
+    to { transform: translateY(-0.2rem); }
+}
+
+@keyframes notice-in {
+    from { opacity: 0; transform: translateY(0.75rem); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-vault.is-spinning .login-vault__wheel,
+    .login-success-notice {
+        animation: none;
+    }
+}
+
+.profile-card {
+    overflow-wrap: anywhere;
+}
+
+.role-badge {
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.35rem 0.7rem;
+}
+
+.role-badge--user {
+    background: #e9ecef;
+    color: #343a40;
+}
+
+.role-badge--moderator {
+    background: #fff3cd;
+    color: #664d03;
+}
+
+.role-badge--admin {
+    background: #f8d7da;
+    color: #842029;
+}
+
+@media (max-width: 575.98px) {
+    .auth-panel {
+        margin: 0.5rem auto;
+        padding: 1.25rem;
+    }
+
+    .login-success-notice {
+        bottom: 0.75rem;
+        left: 0.75rem;
+        right: 0.75rem;
+    }
+}
