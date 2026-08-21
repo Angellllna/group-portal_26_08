@@ -65,76 +65,179 @@
         </div>
     </section>
 
-    {# ---------- ЩО МОЖНА ЗНАЙТИ ---------- #}
+    {# ---------- РОЗДІЛИ ПОРТАЛУ ---------- #}
     <section class="mb-5">
-        <h2 class="h3 mb-3">Що можна знайти на порталі</h2>
+        <h2 class="h3 mb-3">Розділи порталу</h2>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+
             <div class="col">
-                <a href="{% url 'materials:list' %}" class="card h-100 text-decoration-none text-reset">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Навчальні матеріали</h3>
-                        <p class="card-text text-muted mb-0">
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-journal-text"></i></p>
+
+                        <h3 class="h5 card-title">Щоденник</h3>
+
+                        <p class="card-text text-muted">
+                            Оцінки учнів за предметами, середні бали та історія кожної оцінки.
+                        </p>
+
+                        <a href="{% url 'diary:student_list' %}" class="btn btn-primary mt-auto">
+                            Перейти до щоденника
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-ui-checks"></i></p>
+
+                        <h3 class="h5 card-title">Опитування</h3>
+
+                        <p class="card-text text-muted">
+                            Перевір, чи розпізнаєш ти маніпуляцію казино та рекламні прийоми.
+                        </p>
+
+                        <a href="{% url 'polls:poll_list' %}" class="btn btn-primary mt-auto">
+                            Перейти до опитувань
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-collection"></i></p>
+
+                        <h3 class="h5 card-title">Матеріали</h3>
+
+                        <p class="card-text text-muted">
                             Статті, файли та відео про азартні механіки й цифрову безпеку.
                         </p>
+
+                        <a href="{% url 'materials:list' %}" class="btn btn-primary mt-auto">
+                            Перейти до матеріалів
+                        </a>
                     </div>
-                </a>
+                </div>
             </div>
 
-            <div class="col">
-                <a href="{{ polls_url|default:'#' }}" class="card h-100 text-decoration-none text-reset">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Тематичні опитування</h3>
-                        <p class="card-text text-muted mb-0">
-                            Перевір, чи розпізнаєш ти маніпуляцію казино.
-                        </p>
-                    </div>
-                </a>
-            </div>
+            {# Розділи нижче ще не мають маршрутів. Коли модуль буде готовий, #}
+            {# заміни disabled-кнопку на <a href="{% templatetag openblock %} url ... {% templatetag closeblock %}">. #}
 
             <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Форум</h3>
-                        <p class="card-text text-muted mb-0">
-                            Обговорення тем порталу. <span class="badge text-bg-secondary">скоро</span>
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-chat-dots"></i></p>
+
+                        <h3 class="h5 card-title">
+                            Форум
+                            <span class="badge text-bg-secondary align-middle">скоро</span>
+                        </h3>
+
+                        <p class="card-text text-muted">
+                            Обговорюйте азартні механіки, рекламу та цифрову безпеку.
                         </p>
+
+                        {# майбутній маршрут: forum:thread-list #}
+                        <button type="button" class="btn btn-outline-secondary mt-auto" disabled>
+                            Перейти до форуму
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Учнівські роботи</h3>
-                        <p class="card-text text-muted mb-0">
-                            Портфоліо проєктів групи. <span class="badge text-bg-secondary">скоро</span>
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-briefcase"></i></p>
+
+                        <h3 class="h5 card-title">
+                            Портфоліо
+                            <span class="badge text-bg-secondary align-middle">скоро</span>
+                        </h3>
+
+                        <p class="card-text text-muted">
+                            Учнівські роботи та проєкти, зроблені в межах курсу.
                         </p>
+
+                        {# майбутній маршрут: portfolio:portfolio-list #}
+                        <button type="button" class="btn btn-outline-secondary mt-auto" disabled>
+                            Перейти до портфоліо
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Галерея</h3>
-                        <p class="card-text text-muted mb-0">
-                            Фото з подій та занять. <span class="badge text-bg-secondary">скоро</span>
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-images"></i></p>
+
+                        <h3 class="h5 card-title">
+                            Галерея
+                            <span class="badge text-bg-secondary align-middle">скоро</span>
+                        </h3>
+
+                        <p class="card-text text-muted">
+                            Фото з занять, подій та захистів проєктів групи.
                         </p>
+
+                        {# майбутній маршрут: gallery:photo-list #}
+                        <button type="button" class="btn btn-outline-secondary mt-auto" disabled>
+                            Перейти до галереї
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="col">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="h5 card-title">Календар подій</h3>
-                        <p class="card-text text-muted mb-0">
-                            Що і коли відбувається у групі. <span class="badge text-bg-secondary">скоро</span>
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-calendar-event"></i></p>
+
+                        <h3 class="h5 card-title">
+                            Події
+                            <span class="badge text-bg-secondary align-middle">скоро</span>
+                        </h3>
+
+                        <p class="card-text text-muted">
+                            Календар групи: що і коли відбувається найближчим часом.
                         </p>
+
+                        {# майбутній маршрут: events:event-list #}
+                        <button type="button" class="btn btn-outline-secondary mt-auto" disabled>
+                            Перейти до подій
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <div class="col">
+                <div class="card h-100 section-card">
+                    <div class="card-body d-flex flex-column">
+                        <p class="section-card__icon mb-2"><i class="bi bi-megaphone"></i></p>
+
+                        <h3 class="h5 card-title">
+                            Оголошення
+                            <span class="badge text-bg-secondary align-middle">скоро</span>
+                        </h3>
+
+                        <p class="card-text text-muted">
+                            Важливі новини порталу й повідомлення для всієї групи.
+                        </p>
+
+                        {# майбутній маршрут: announcements:announcement-list #}
+                        <button type="button" class="btn btn-outline-secondary mt-auto" disabled>
+                            Перейти до оголошень
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
