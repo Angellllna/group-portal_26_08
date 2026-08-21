@@ -30,15 +30,15 @@ class Subject(models.Model):
 class Grade(models.Model):
     value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)],blank=True,null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="student")
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,related_name="created_by")
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name="grades")
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True,related_name="created_grades")
     comment = models.TextField(max_length=500,blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     grade_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name = "оцінки"
         verbose_name_plural = "оцінки"
         ordering = ["-created_at"]
     def __str__(self):
-            return f'{self.value} - {self.subject} - {self.student}'
+            return f'{self.value} - {self.subject.title} - {self.student}'
