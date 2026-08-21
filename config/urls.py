@@ -48,5 +48,8 @@ urlpatterns = [
 
 # Роздача завантажених користувачами файлів під час розробки (DEBUG = True).
 # На продакшені медіа роздає вебсервер (nginx тощо), а не Django.
+
+Debug = True
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
