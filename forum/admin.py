@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import ForumCategory, ForumThread, ForumPost
 
+
 @admin.register(ForumCategory)
 class ForumCategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'is_active', 'position', 'created_at')
