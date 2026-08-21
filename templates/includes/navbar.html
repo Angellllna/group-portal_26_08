@@ -29,7 +29,15 @@
                     <li class="nav-item">
                         <span class="nav-link">{{ user.username }}</span>
                     </li>
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            <span class="badge {% if user.role == 'admin' %}text-bg-danger{% elif user.role == 'moderator' %}text-bg-warning{% else %}text-bg-secondary{% endif %}">
+                                {{ user.get_role_display }}
+                            </span>
+                        </span>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}">Профіль</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:password-change' %}">Змінити пароль</a></li>
                     {# вихід лише POST-запитом — GET на /accounts/logout/ повертає 405 #}
                     <li class="nav-item">
                         <form method="post" action="{% url 'accounts:logout' %}">

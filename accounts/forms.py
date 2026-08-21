@@ -19,6 +19,11 @@ class RegisterForm(UserCreationForm):
             user.save()
         return user
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field in self.fields.values():
+                field.widget.attrs["class"] = "form-control"
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -32,6 +37,11 @@ class ProfileUpdateForm(forms.ModelForm):
             "last_name": "Прізвище",
             "email": "Email",
         }
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            for field in self.fields.values():
+                field.widget.attrs["class"] = "form-control"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

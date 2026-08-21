@@ -3,6 +3,10 @@
 {% block title %}Доступ заборонено{% endblock %}
 
 {% block content %}
-  <h1>403 Forbidden</h1>
-  <p>У вас немає прав для виконання цієї дії.</p>
+  <section class="auth-panel auth-panel--compact text-center">
+    <p class="auth-panel__eyebrow">403 Forbidden</p>
+    <h1>Доступ заборонено</h1>
+    <p>У вас немає прав для виконання цієї дії.</p>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary mt-3">На головну</a>
+  </section>
 {% endblock %}

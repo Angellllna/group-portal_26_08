@@ -7,6 +7,8 @@ from .views import (
     ProfileUpdateView,
     PublicProfileDetailView,
     RegisterView,
+        AccountPasswordChangeView,
+        AccountPasswordChangeDoneView,
 )
 
 app_name = "accounts"
@@ -18,4 +20,6 @@ urlpatterns = [
     path("profile/", ProfileDetailView.as_view(), name="profile"),
     path("profile/edit/", ProfileUpdateView.as_view(), name="profile-edit"),
     path("users/<int:pk>/", PublicProfileDetailView.as_view(), name="public-profile"),
+        path("password-change/", AccountPasswordChangeView.as_view(), name="password-change"),
+        path("password-change/done/", AccountPasswordChangeDoneView.as_view(), name="password-change-done"),
 ]
