@@ -294,6 +294,7 @@ class ProfileViewTests(TestCase):
         response = self.client.post(
             reverse("accounts:profile-edit"),
             {
+                "username": "updated-profileuser",
                 "first_name": "New",
                 "last_name": "Surname",
                 "email": "new@example.com",
@@ -302,6 +303,7 @@ class ProfileViewTests(TestCase):
 
         self.assertRedirects(response, reverse("accounts:profile"))
         self.user.refresh_from_db()
+        self.assertEqual(self.user.username, "updated-profileuser")
         self.assertEqual(self.user.first_name, "New")
         self.assertEqual(self.user.last_name, "Surname")
         self.assertEqual(self.user.email, "new@example.com")
@@ -313,6 +315,7 @@ class ProfileViewTests(TestCase):
         response = self.client.post(
             reverse("accounts:profile-edit"),
             {
+                "username": "profileuser",
                 "first_name": "New",
                 "last_name": "Surname",
                 "email": "new@example.com",
@@ -333,7 +336,12 @@ class ProfileViewTests(TestCase):
 
         response = self.client.post(
             reverse("accounts:profile-edit") + f"?user_id={self.other_user.pk}",
-            {"first_name": "Changed", "last_name": "User", "email": "changed@example.com"},
+            {
+                "username": "profileuser",
+                "first_name": "Changed",
+                "last_name": "User",
+                "email": "changed@example.com",
+            },
         )
 
         self.assertRedirects(response, reverse("accounts:profile"))
