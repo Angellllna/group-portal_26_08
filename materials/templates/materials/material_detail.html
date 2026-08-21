@@ -67,7 +67,9 @@
 
 <p>
     <strong>Автор:</strong>
-    {{ material.author.username }}
+    <a href="{% url 'accounts:public-profile' material.author.pk %}">
+        {{ material.author.username }}
+    </a>
 </p>
 
 
