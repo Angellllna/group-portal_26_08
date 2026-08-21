@@ -176,7 +176,6 @@ class UserAnswer(models.Model):
         return f"{self.result.user} - {self.question}"
 
     def clean(self):
-        # питання повинно належати тому самому опитуванню, що й результат
         if self.question.page.poll_id != self.result.poll_id:
             raise ValidationError(
                 "Питання належить іншому опитуванню, ніж результат."

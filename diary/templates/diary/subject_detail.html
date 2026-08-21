@@ -1,0 +1,69 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ subject.title }}{% endblock %}
+
+{% block content %}
+
+<p>
+    <a href="{% url 'diary:subject-list' %}" class="btn btn-outline-dark btn-sm">
+        ← До предметів
+    </a>
+</p>
+
+<h1 class="page-title">{{ subject.title }}</h1>
+
+{% if subject.description %}
+    <p class="lead">{{ subject.description }}</p>
+{% endif %}
+
+{% if grades %}
+
+    <p>
+        Середній бал з предмета: <strong>{{ average|floatformat:1 }}</strong>
+    </p>
+
+    <div class="table-responsive">
+
+        <table class="table align-middle">
+
+            <thead>
+                <tr>
+                    <th scope="col">Учень</th>
+                    <th scope="col" class="text-center" style="width: 6rem;">Оцінка</th>
+                    <th scope="col" style="width: 10rem;">Дата</th>
+                    <th scope="col">Коментар</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for grade in grades %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'diary:student_grades' grade.student.pk %}">
+                                {{ grade.student.get_full_name|default:grade.student.username }}
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge text-bg-dark">{{ grade.value }}</span>
+                        </td>
+                        <td>{{ grade.created_at|date:"d.m.Y" }}</td>
+                        <td>
+                            {% if grade.comment %}{{ grade.comment }}{% else %}<span class="text-muted">—</span>{% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+{% else %}
+
+    <div class="alert alert-info">
+        З цього предмета оцінок ще немає.
+    </div>
+
+{% endif %}
+
+{% endblock %}

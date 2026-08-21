@@ -27,17 +27,13 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # ТИМЧАСОВА головна сторінка-заглушка.
-    # Той, хто робить модуль core (HOME), видаляє цей рядок і templates/home.html,
-    # а замість них розкоментовує path("", include("core.urls")) нижче.
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # --- Модулі порталу ---
     path("", include("core.urls")),                            # HOME — головна сторінка
     path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("events/", include("events.urls")),                   # EVE  — події та календар
-    # path("polls/", include("polls.urls")),                     # POL  — опитування
+    path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
     path("materials/", include("materials.urls")),             # MAT  — матеріали

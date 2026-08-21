@@ -1,0 +1,37 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ poll.title }}{% endblock %}
+
+{% block content %}
+    <h1 class="page-title mb-3">{{ poll.title }}</h1>
+
+    <p class="lead">{{ poll.description }}</p>
+
+    <ul class="list-unstyled">
+        <li>Кількість етапів: <strong>{{ pages_count }}</strong></li>
+        <li>Кількість запитань: <strong>{{ questions_count }}</strong></li>
+    </ul>
+
+    {% if result %}
+        <div class="alert alert-success">
+            Ви вже проходили це опитування.
+            {% if poll.show_result and result.max_score %}
+                Результат: {{ result.score }} з {{ result.max_score }}.
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if pages_count == 0 %}
+        <p class="text-muted">Опитування ще готується — етапів поки немає.</p>
+    {% elif result and not poll.allow_retake %}
+        <p class="text-muted">Повторне проходження цього опитування заборонено.</p>
+    {% else %}
+        <a href="{% url 'polls:poll_start' poll.slug %}" class="btn btn-primary btn-lg">
+            {% if result %}Пройти ще раз{% else %}Почати опитування{% endif %}
+        </a>
+    {% endif %}
+
+    <p class="mt-4">
+        <a href="{% url 'polls:poll_list' %}">← До списку опитувань</a>
+    </p>
+{% endblock %}
