@@ -245,6 +245,24 @@ class LoginLogoutViewTests(TestCase):
 
         self.assertRedirects(response, reverse("home"))
 
+    def test_login_shows_wrong_password_message(self):
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"username": "loginuser", "password": "WrongPassword#99"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Неправильний пароль.")
+
+    def test_login_shows_unknown_account_message(self):
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"username": "missing-user", "password": "WrongPassword#99"},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Такого акаунта не існує.")
+
     def test_logout_redirects_to_home(self):
         self.client.force_login(self.user)
 

@@ -1,6 +1,6 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from .models import User
 
@@ -19,10 +19,28 @@ class RegisterForm(UserCreationForm):
             user.save()
         return user
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            for field in self.fields.values():
-                field.widget.attrs["class"] = "form-control"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = "form-control"
+
+
+class AccountLoginForm(AuthenticationForm):
+    error_messages = {
+        "invalid_login": "Неправильний пароль.",
+        "unknown_account": "Такого акаунта не існує.",
+    }
+
+    def clean(self):
+        try:
+            return super().clean()
+        except forms.ValidationError:
+            username = self.cleaned_data.get("username") or self.data.get("username", "")
+            if get_user_model().objects.filter(username=username).exists():
+                message = self.error_messages["invalid_login"]
+            else:
+                message = self.error_messages["unknown_account"]
+            raise forms.ValidationError(message, code="invalid_login")
 
 
 class ProfileUpdateForm(forms.ModelForm):

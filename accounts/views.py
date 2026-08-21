@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 
-from .forms import ProfileUpdateForm, RegisterForm
+from .forms import AccountLoginForm, ProfileUpdateForm, RegisterForm
 from .models import User
 
 
@@ -26,6 +26,7 @@ class RegisterView(CreateView):
 
 
 class AccountLoginView(LoginView):
+    authentication_form = AccountLoginForm
     template_name = "accounts/login.html"
 
     def form_valid(self, form):
