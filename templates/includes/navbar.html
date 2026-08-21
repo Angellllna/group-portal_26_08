@@ -5,7 +5,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
 
-        <a class="navbar-brand" href="{% url 'home' %}">Портал групи</a>
+        <a class="navbar-brand" href="{% url 'home' %}"
+           {% if request.path == '/' %}aria-current="page"{% endif %}>Портал групи</a>
 
         <button class="navbar-toggler" type="button"
                 data-bs-toggle="collapse" data-bs-target="#mainNav"
@@ -18,13 +19,7 @@
 
             <ul class="navbar-nav me-auto">
 
-                {# поточний розділ підсвічується: порівнюємо початок адреси #}
-                <li class="nav-item">
-                    <a class="nav-link{% if request.path == '/' %} active{% endif %}"
-                       {% if request.path == '/' %}aria-current="page"{% endif %}
-                       href="{% url 'home' %}">Головна</a>
-                </li>
-
+                {# окремого пункту «Головна» немає: на головну веде бренд «Портал групи» #}
                 {# <li class="nav-item"><a class="nav-link" href="{% url 'forum:thread-list' %}">Форум</a></li> #}
 
                 <li class="nav-item">
