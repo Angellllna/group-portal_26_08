@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block title %}Профіль {{ object.username }}{% endblock %}
+
+{% block content %}
+  <h1>Профіль {{ object.username }}</h1>
+  <dl>
+    <dt>Username</dt><dd>{{ object.username }}</dd>
+    <dt>Ім'я</dt><dd>{{ object.first_name|default:"Не вказано" }}</dd>
+    <dt>Прізвище</dt><dd>{{ object.last_name|default:"Не вказано" }}</dd>
+    <dt>Роль</dt><dd>{{ object.get_role_display }}</dd>
+    <dt>Дата приєднання</dt><dd>{{ object.date_joined }}</dd>
+  </dl>
+{% endblock %}

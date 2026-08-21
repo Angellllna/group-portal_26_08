@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block title %}Редагування профілю{% endblock %}
+
+{% block content %}
+  <h1>Редагування профілю</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Зберегти</button>
+    <a href="{% url 'accounts:profile' %}">Скасувати</a>
+  </form>
+{% endblock %}

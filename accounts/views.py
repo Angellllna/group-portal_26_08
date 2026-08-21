@@ -1,9 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
+from django.views.generic.edit import UpdateView
 
-from .forms import RegisterForm
+from .forms import ProfileUpdateForm, RegisterForm
+from .models import User
 
 
 class RegisterView(CreateView):
@@ -34,3 +38,31 @@ class AccountLogoutView(LogoutView):
         if request.user.is_authenticated:
             messages.success(request, "Ви вийшли з акаунта.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = "accounts/profile_detail.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileUpdateForm
+    template_name = "accounts/profile_form.html"
+    success_url = reverse_lazy("accounts:profile")
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Профіль успішно оновлено.")
+        return response
+
+
+class PublicProfileDetailView(DetailView):
+    model = User
+    template_name = "accounts/public_profile_detail.html"

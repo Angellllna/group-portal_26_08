@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block title %}Мій профіль{% endblock %}
+
+{% block content %}
+  <h1>Мій профіль</h1>
+  <dl>
+    <dt>Username</dt><dd>{{ object.username }}</dd>
+    <dt>Ім'я</dt><dd>{{ object.first_name|default:"Не вказано" }}</dd>
+    <dt>Прізвище</dt><dd>{{ object.last_name|default:"Не вказано" }}</dd>
+    <dt>Email</dt><dd>{{ object.email|default:"Не вказано" }}</dd>
+    <dt>Роль</dt><dd>{{ object.get_role_display }}</dd>
+    <dt>Дата реєстрації</dt><dd>{{ object.date_joined }}</dd>
+    <dt>Останній вхід</dt><dd>{{ object.last_login|default:"Ще не входив" }}</dd>
+  </dl>
+  <a href="{% url 'accounts:profile-edit' %}">Редагувати профіль</a>
+{% endblock %}
