@@ -28,7 +28,8 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     # --- Модулі порталу ---
-    path("", include("core.urls")),                            # HOME — головна сторінка
+    path("", include("core.urls"))                        # HOME — головна сторінка
+    path(% url "home" %)
     # path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
