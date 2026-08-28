@@ -1,0 +1,276 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    Керування категоріями
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4">
+
+    <div
+        class="d-flex justify-content-between
+               align-items-center mb-4"
+    >
+
+        <div>
+
+            <h1>
+                Керування категоріями
+            </h1>
+
+            <p class="text-muted mb-0">
+                Створення, редагування, приховування
+                та зміна порядку категорій.
+            </p>
+
+        </div>
+
+        <a
+            href="{% url 'materials:category_create' %}"
+            class="btn btn-primary"
+        >
+            + Додати категорію
+        </a>
+
+    </div>
+
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    {% if categories %}
+
+        <div class="table-responsive">
+
+            <table
+                class="table table-bordered
+                       table-hover align-middle"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Порядок
+                        </th>
+
+                        <th>
+                            Назва
+                        </th>
+
+                        <th>
+                            Slug
+                        </th>
+
+                        <th>
+                            Статус
+                        </th>
+
+                        <th>
+                            Матеріалів
+                        </th>
+
+                        <th>
+                            Дії
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for category in categories %}
+
+                        <tr>
+
+                            <td>
+                                {{ category.position }}
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    {{ category.title }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <code>
+                                    {{ category.slug }}
+                                </code>
+
+                            </td>
+
+
+                            <td>
+
+                                {% if category.is_active %}
+
+                                    <span class="badge bg-success">
+                                        Активна
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        Прихована
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ category.materials.count }}
+                            </td>
+
+
+                            <td>
+
+                                <div class="d-flex flex-wrap gap-2">
+
+                                    <!-- Редагувати -->
+
+                                    <a
+                                        href="{% url 'materials:category_update' category.pk %}"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        Редагувати
+                                    </a>
+
+
+                                    <!-- Приховати -->
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'materials:category_toggle' category.pk %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        {% if category.is_active %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-warning"
+                                            >
+                                                Приховати
+                                            </button>
+
+                                        {% else %}
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-success"
+                                            >
+                                                Активувати
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+
+                                    <!-- Вгору -->
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'materials:category_move_up' category.pk %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-secondary"
+                                        >
+                                            ↑
+                                        </button>
+
+                                    </form>
+
+
+                                    <!-- Вниз -->
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'materials:category_move_down' category.pk %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-secondary"
+                                        >
+                                            ↓
+                                        </button>
+
+                                    </form>
+
+
+                                    <!-- Видалити -->
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'materials:category_delete' category.pk %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm(
+                                                'Ви впевнені, що хочете видалити категорію?'
+                                            );"
+                                        >
+                                            Видалити
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-info">
+            Категорій поки немає.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

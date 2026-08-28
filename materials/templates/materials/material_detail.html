@@ -6,183 +6,224 @@
 
 {% block content %}
 
-<div class="mb-4">
+<div class="container my-4">
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div class="row justify-content-center">
 
-        <a
-            href="{% url 'materials:list' %}"
-            class="btn btn-outline-dark"
-        >
-            ← Назад до матеріалів
-        </a>
+        <div class="col-lg-9">
 
-        {% if can_manage %}
-            <div class="d-flex flex-wrap gap-2">
+            <div class="card shadow-sm">
 
-                <a
-                    href="{% url 'materials:edit' material.slug %}"
-                    class="btn btn-dark"
-                >
-                    Редагувати
-                </a>
+                <div class="card-body">
 
-                <a
-                    href="{% url 'materials:delete' material.slug %}"
-                    class="btn btn-danger"
-                >
-                    Видалити
-                </a>
+                    <div
+                        class="d-flex justify-content-between
+                               align-items-start mb-3"
+                    >
 
-            </div>
-        {% endif %}
+                        <div>
 
-    </div>
+                            <h1 class="mb-2">
+                                {{ material.title }}
+                            </h1>
 
-</div>
+                            <div>
 
-{% if can_manage and not material.is_published %}
-    <div class="alert alert-warning">
-        Чернетка: матеріал не показується у публічному списку.
-    </div>
-{% endif %}
+                                <span class="badge bg-info text-dark">
+                                    {{ material.category.title }}
+                                </span>
 
+                                <span class="badge bg-secondary">
+                                    {{ material.get_material_type_display }}
+                                </span>
 
-<h1>{{ material.title }}</h1>
+                                {% if not material.is_published and can_manage %}
 
-<hr>
+                                    <span class="badge bg-warning text-dark">
+                                        Не опубліковано
+                                    </span>
 
+                                {% endif %}
 
-<p>
-    <strong>Категорія:</strong>
-    {{ material.get_category_display }}
-</p>
+                            </div>
+
+                        </div>
+
+                    </div>
 
 
-<p>
-    <strong>Тип:</strong>
-    {{ material.get_material_type_display }}
-</p>
+                    {% if material.description %}
+
+                        <div class="mb-4">
+
+                            <h5>Опис</h5>
+
+                            <div>
+                                {{ material.description|linebreaks }}
+                            </div>
+
+                        </div>
+
+                    {% endif %}
 
 
-<p>
-    <strong>Автор:</strong>
-    <a href="{% url 'accounts:public-profile' material.author.pk %}">
-        {{ material.author.username }}
-    </a>
-</p>
+                    <!-- ФАЙЛ -->
+
+                    {% if material.material_type == "file" %}
+
+                        {% if material.file %}
+
+                            <div class="mb-4">
+
+                                <h5>Файл</h5>
+
+                                <a
+                                    href="{{ material.file.url }}"
+                                    class="btn btn-primary"
+                                    download
+                                >
+                                    Завантажити файл
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endif %}
 
 
-<p>
-    <strong>Дата створення:</strong>
-    {{ material.created_at|date:"d.m.Y H:i" }}
-</p>
+                    <!-- ЗОБРАЖЕННЯ -->
+
+                    {% if material.material_type == "image" %}
+
+                        {% if material.image %}
+
+                            <div class="mb-4">
+
+                                <h5>Зображення</h5>
+
+                                <img
+                                    src="{{ material.image.url }}"
+                                    alt="{{ material.title }}"
+                                    class="img-fluid rounded"
+                                >
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endif %}
 
 
-<div class="mt-4">
+                    <!-- ПОСИЛАННЯ -->
 
-    <h3>Опис</h3>
+                    {% if material.material_type == "link" %}
 
-    <p>
-        {{ material.description }}
-    </p>
+                        {% if material.external_url %}
 
-</div>
+                            <div class="mb-4">
 
+                                <h5>Посилання</h5>
 
-{% if material.material_type == "file" and material.file %}
+                                <a
+                                    href="{{ material.external_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="btn btn-primary"
+                                >
+                                    Відкрити посилання
+                                </a>
 
-    <div class="mt-4">
+                            </div>
 
-        <p>
-            <strong>Файл:</strong>
-            {{ material.file_name }}
-            {% if material.file_extension %}
-                <span class="badge bg-secondary">{{ material.file_extension }}</span>
-            {% endif %}
-        </p>
+                        {% endif %}
 
-        <a
-            href="{{ material.file.url }}"
-            class="btn btn-dark"
-            download
-        >
-            Завантажити
-        </a>
-
-    </div>
-
-{% endif %}
+                    {% endif %}
 
 
-{% if material.material_type == "image" and material.file %}
+                    <!-- YOUTUBE -->
 
-    <div class="mt-4">
+                    {% if material.material_type == "youtube" %}
 
-        <img
-            src="{{ material.file.url }}"
-            alt="{{ material.title }}"
-            class="img-fluid rounded"
-        >
+                        {% if material.youtube_embed_url %}
 
-    </div>
+                            <div class="mb-4">
 
-{% endif %}
+                                <h5>YouTube-відео</h5>
 
+                                <div class="ratio ratio-16x9">
 
-{% if material.material_type == "link" and material.link %}
+                                    <iframe
+                                        src="{{ material.youtube_embed_url }}"
+                                        title="{{ material.title }}"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen
+                                    ></iframe>
 
-    <div class="mt-4">
+                                </div>
 
-        <a
-            href="{{ material.link }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-dark"
-        >
-            Перейти до ресурсу
-        </a>
+                            </div>
 
-    </div>
+                        {% endif %}
 
-{% endif %}
+                    {% endif %}
 
 
-{% if material.material_type == "youtube" %}
+                    <!-- ІНФОРМАЦІЯ -->
 
-    {% if material.youtube_embed_url %}
+                    <div class="text-muted mb-4">
 
-        <div class="mt-4">
+                        <strong>Автор:</strong>
+                        {{ material.author|default:"Не вказано" }}
 
-            <div class="ratio ratio-16x9">
+                        <br>
 
-                <iframe
-                    src="{{ material.youtube_embed_url }}"
-                    title="{{ material.title }}"
-                    allowfullscreen
-                ></iframe>
+                        <strong>Додано:</strong>
+                        {{ material.created_at|date:"d.m.Y H:i" }}
+
+                    </div>
+
+
+                    <!-- КНОПКИ -->
+
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <a
+                            href="{% url 'materials:material_list' %}"
+                            class="btn btn-secondary"
+                        >
+                            ← До матеріалів
+                        </a>
+
+
+                        {% if can_manage %}
+
+                            <a
+                                href="{% url 'materials:material_update' material.slug %}"
+                                class="btn btn-outline-primary"
+                            >
+                                Редагувати
+                            </a>
+
+                            <a
+                                href="{% url 'materials:material_delete' material.slug %}"
+                                class="btn btn-outline-danger"
+                            >
+                                Видалити
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-    {% elif material.link %}
+    </div>
 
-        <div class="mt-4">
-
-            <a
-                href="{{ material.link }}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn btn-danger"
-            >
-                Відкрити YouTube
-            </a>
-
-        </div>
-
-    {% endif %}
-
-{% endif %}
+</div>
 
 {% endblock %}

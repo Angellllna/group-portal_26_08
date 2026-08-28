@@ -1,0 +1,178 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    {% if object %}
+        Редагування категорії
+    {% else %}
+        Створення категорії
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h1 class="mb-4">
+
+                        {% if object %}
+                            Редагування категорії
+                        {% else %}
+                            Створення категорії
+                        {% endif %}
+
+                    </h1>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+
+                        {% if form.non_field_errors %}
+
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- Назва -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="{{ form.title.id_for_label }}"
+                                class="form-label"
+                            >
+                                Назва категорії
+                            </label>
+
+                            {{ form.title }}
+
+                            {% for error in form.title.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Опис -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="{{ form.description.id_for_label }}"
+                                class="form-label"
+                            >
+                                Опис
+                            </label>
+
+                            {{ form.description }}
+
+                            {% for error in form.description.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Порядок -->
+
+                        <div class="mb-3">
+
+                            <label
+                                for="{{ form.position.id_for_label }}"
+                                class="form-label"
+                            >
+                                Порядок
+                            </label>
+
+                            {{ form.position }}
+
+                            <div class="form-text">
+                                Чим менше число, тим вище категорія.
+                            </div>
+
+                            {% for error in form.position.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Активність -->
+
+                        <div class="form-check mb-4">
+
+                            {{ form.is_active }}
+
+                            <label
+                                for="{{ form.is_active.id_for_label }}"
+                                class="form-check-label"
+                            >
+                                Активна категорія
+                            </label>
+
+                            {% for error in form.is_active.errors %}
+
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Зберегти
+                            </button>
+
+                            <a
+                                href="{% url 'materials:category_list' %}"
+                                class="btn btn-secondary"
+                            >
+                                Скасувати
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

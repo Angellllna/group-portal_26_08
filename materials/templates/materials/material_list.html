@@ -1,166 +1,355 @@
 {% extends "core/base.html" %}
 
-{% block title %}Матеріали{% endblock %}
+{% block title %}Навчальні матеріали{% endblock %}
 
 {% block content %}
 
-<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+<div class="container my-4">
 
-    <div>
-        <h1 class="page-title">{{ title }}</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <p class="lead">
-            {{ description }}
-        </p>
+        <div>
+            <h1>Навчальні матеріали</h1>
+
+            <p class="text-muted">
+                Корисні файли, статті, посилання та відео.
+            </p>
+        </div>
+
+        {% if can_manage %}
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'materials:material_create' %}"
+                    class="btn btn-primary"
+                >
+                    + Додати матеріал
+                </a>
+
+                <a
+                    href="{% url 'materials:category_list' %}"
+                    class="btn btn-outline-secondary"
+                >
+                    Керування категоріями
+                </a>
+
+            </div>
+        {% endif %}
+
     </div>
 
-    {% if can_manage %}
-        <a href="{% url 'materials:add' %}" class="btn btn-primary">
-            Додати матеріал
-        </a>
-    {% endif %}
 
-</div>
+    <!-- ПОШУК І ФІЛЬТРИ -->
 
-<hr>
+    <div class="card mb-4">
 
-<h3>Категорії</h3>
+        <div class="card-body">
 
-<ul>
-    {% for category in categories %}
-        <li>
-            {{ category }}
-        </li>
-    {% empty %}
-        <li>
-            Категорій поки немає.
-        </li>
-    {% endfor %}
-</ul>
+            <form method="get">
 
-<hr>
+                <div class="row g-3">
 
-<h2>Матеріали</h2>
+                    <!-- Пошук -->
 
-<div class="row">
+                    <div class="col-md-5">
 
-    {% for material in materials %}
-
-        <div class="col-md-4 mb-4">
-
-            <div class="card h-100">
-
-                <div class="card-body">
-
-                    <h3 class="card-title">
-                        {{ material.title }}
-                    </h3>
-
-                    <p>
-                        <strong>Категорія:</strong>
-                        {{ material.get_category_display }}
-                    </p>
-
-                    <p>
-                        <strong>Тип:</strong>
-                        {{ material.get_material_type_display }}
-                    </p>
-
-                    <p>
-                        {{ material.description|truncatewords:20 }}
-                    </p>
-
-                    <p class="text-muted">
-                        {{ material.created_at|date:"d.m.Y H:i" }}
-                    </p>
-
-                    {% if can_manage and not material.is_published %}
-                        <p>
-                            <span class="badge text-bg-warning">чернетка</span>
-                        </p>
-                    {% endif %}
-
-                    <div class="d-flex flex-wrap gap-2">
-
-                        <a
-                            href="{% url 'materials:detail' material.slug %}"
-                            class="btn btn-dark"
+                        <label
+                            for="id_search"
+                            class="form-label"
                         >
-                            Переглянути
-                        </a>
+                            Пошук
+                        </label>
 
-                        {% if can_manage %}
-                            <a
-                                href="{% url 'materials:edit' material.slug %}"
-                                class="btn btn-outline-dark"
-                            >
-                                Редагувати
-                            </a>
+                        <input
+                            type="text"
+                            name="search"
+                            id="id_search"
+                            class="form-control"
+                            placeholder="Пошук за назвою або описом"
+                            value="{{ current_search }}"
+                        >
 
-                            <a
-                                href="{% url 'materials:delete' material.slug %}"
-                                class="btn btn-outline-danger"
-                            >
-                                Видалити
-                            </a>
-                        {% endif %}
+                    </div>
+
+
+                    <!-- Категорія -->
+
+                    <div class="col-md-3">
+
+                        <label
+                            for="id_category"
+                            class="form-label"
+                        >
+                            Категорія
+                        </label>
+
+                        <select
+                            name="category"
+                            id="id_category"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Усі категорії
+                            </option>
+
+                            {% for category in categories %}
+
+                                <option
+                                    value="{{ category.slug }}"
+                                    {% if current_category == category.slug %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ category.title }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Тип -->
+
+                    <div class="col-md-3">
+
+                        <label
+                            for="id_type"
+                            class="form-label"
+                        >
+                            Тип
+                        </label>
+
+                        <select
+                            name="type"
+                            id="id_type"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Усі
+                            </option>
+
+                            {% for value, label in material_types %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if current_type == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Кнопки -->
+
+                    <div class="col-md-1 d-flex align-items-end">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >
+                            🔎
+                        </button>
 
                     </div>
 
                 </div>
 
+            </form>
+
+
+            {% if has_filters %}
+
+                <div class="mt-3">
+
+                    <a
+                        href="{% url 'materials:material_list' %}"
+                        class="btn btn-outline-secondary btn-sm"
+                    >
+                        Скинути фільтри
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- РЕЗУЛЬТАТИ -->
+
+    {% if materials %}
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            {% for material in materials %}
+
+                <div class="col">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <div class="card-body">
+
+                            <div class="mb-2">
+
+                                <span class="badge bg-secondary">
+                                    {{ material.get_material_type_display }}
+                                </span>
+
+                                <span class="badge bg-info text-dark">
+                                    {{ material.category.title }}
+                                </span>
+
+                                {% if not material.is_published and can_manage %}
+
+                                    <span class="badge bg-warning text-dark">
+                                        Не опубліковано
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <h5 class="card-title">
+                                {{ material.title }}
+                            </h5>
+
+
+                            {% if material.description %}
+
+                                <p class="card-text text-muted">
+                                    {{ material.description|truncatewords:20 }}
+                                </p>
+
+                            {% else %}
+
+                                <p class="card-text text-muted">
+                                    Опис відсутній.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div
+                            class="card-footer bg-white border-0
+                                   d-flex justify-content-between
+                                   align-items-center"
+                        >
+
+                            <small class="text-muted">
+                                {{ material.created_at|date:"d.m.Y" }}
+                            </small>
+
+                            <a
+                                href="{{ material.get_absolute_url }}"
+                                class="btn btn-sm btn-outline-primary"
+                            >
+                                Переглянути
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ПАГІНАЦІЯ -->
+
+        {% if is_paginated %}
+
+            <nav class="mt-4">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if page_obj.has_previous %}
+
+                        <li class="page-item">
+
+                            <a
+                                class="page-link"
+                                href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                            >
+                                ← Назад
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+
+                    <li class="page-item active">
+
+                        <span class="page-link">
+                            {{ page_obj.number }}
+                        </span>
+
+                    </li>
+
+
+                    {% if page_obj.has_next %}
+
+                        <li class="page-item">
+
+                            <a
+                                class="page-link"
+                                href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+                            >
+                                Далі →
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        {% endif %}
+
+
+    {% else %}
+
+        {% if has_filters %}
+
+            <div class="alert alert-info text-center">
+
+                За вашим запитом матеріалів не знайдено.
+
             </div>
 
-        </div>
+        {% else %}
 
-    {% empty %}
+            <div class="alert alert-info text-center">
 
-        <div class="col-12">
-            <p>
                 Навчальні матеріали поки не додані.
-            </p>
-        </div>
 
-    {% endfor %}
+            </div>
+
+        {% endif %}
+
+    {% endif %}
 
 </div>
-
-
-{% if is_paginated %}
-
-    <nav aria-label="Навігація сторінками">
-
-        <div class="d-flex justify-content-center gap-3">
-
-            {% if page_obj.has_previous %}
-                <a
-                    href="?page={{ page_obj.previous_page_number }}"
-                    class="btn btn-outline-dark"
-                >
-                    ← Назад
-                </a>
-            {% endif %}
-
-            <span class="align-self-center">
-                Сторінка
-                {{ page_obj.number }}
-                з
-                {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-                <a
-                    href="?page={{ page_obj.next_page_number }}"
-                    class="btn btn-outline-dark"
-                >
-                    Далі →
-                </a>
-            {% endif %}
-
-        </div>
-
-    </nav>
-
-{% endif %}
 
 {% endblock %}

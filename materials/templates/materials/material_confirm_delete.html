@@ -1,45 +1,80 @@
 {% extends "core/base.html" %}
 
-{% block title %}Видалення матеріалу{% endblock %}
+{% block title %}
+    Видалення матеріалу
+{% endblock %}
 
 {% block content %}
 
-<h1 class="page-title mb-4">Видалення матеріалу</h1>
+<div class="container my-4">
 
-<div class="card mb-4">
-    <div class="card-body">
+    <div class="row justify-content-center">
 
-        <h2 class="h5 card-title">{{ material.title }}</h2>
+        <div class="col-lg-7">
 
-        <p class="mb-1">
-            <strong>Тип:</strong> {{ material.get_material_type_display }}
-        </p>
+            <div class="card border-danger">
 
-        <p class="mb-0">
-            <strong>Категорія:</strong> {{ material.get_category_display }}
-        </p>
+                <div class="card-body">
+
+                    <h1 class="text-danger">
+                        Видалення матеріалу
+                    </h1>
+
+                    <div class="alert alert-warning">
+
+                        <h5>
+                            Ви дійсно хочете видалити
+                            цей матеріал?
+                        </h5>
+
+                        <hr>
+
+                        <p class="mb-1">
+                            <strong>Назва:</strong>
+                            {{ object.title }}
+                        </p>
+
+                        <p class="mb-1">
+                            <strong>Тип:</strong>
+                            {{ object.get_material_type_display }}
+                        </p>
+
+                        <p class="mb-0">
+                            <strong>Категорія:</strong>
+                            {{ object.category.title }}
+                        </p>
+
+                    </div>
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                        >
+                            Видалити
+                        </button>
+
+                        <a
+                            href="{% url 'materials:material_detail' object.slug %}"
+                            class="btn btn-secondary"
+                        >
+                            Скасувати
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
+
 </div>
-
-<div class="alert alert-danger">
-    Матеріал буде видалено назавжди. Скасувати цю дію неможливо.
-</div>
-
-<form method="post">
-
-    {% csrf_token %}
-
-    <div class="d-flex gap-2">
-
-        <button type="submit" class="btn btn-danger">Видалити</button>
-
-        <a href="{% url 'materials:detail' material.slug %}" class="btn btn-outline-secondary">
-            Скасувати
-        </a>
-
-    </div>
-
-</form>
 
 {% endblock %}

@@ -1,86 +1,45 @@
-{# Головне меню сайту. #}
-{# У меню перелічені всі модулі проєкту. Модуль, якого ще немає в config/urls.py, #}
-{# показується неактивним пунктом: {% url %} падає з NoReverseMatch, поки маршруту #}
-{# не існує. Коли твій модуль готовий — заміни <span class="nav-link disabled"> #}
-{# на <a class="nav-link" href="{% url '...' %}">. #}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+<nav class="navbar">
+    <div class="navbar-container">
 
-        {# HOME — головна сторінка #}
-        <a class="navbar-brand" href="{% url 'home' %}"
-           {% if request.path == '/' %}aria-current="page"{% endif %}>Портал групи</a>
+        <a href="{% url 'home' %}" class="navbar-brand">
+            Портал групи
+        </a>
 
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false"
-                aria-label="Показати меню">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="navbar-menu">
 
-        <div class="collapse navbar-collapse" id="mainNav">
+            <a href="/materials/" class="navbar-link">
+                Навчальні матеріали
+            </a>
+            {% if user.is_authenticated %}
 
-            <ul class="navbar-nav me-auto">
+                {% if user.can_moderate %}
+                    <a href="{% url 'materials:add' %}" class="navbar-link">
+                        Додати матеріал
+                    </a>
 
-                {# FOR — форум #}
-                <li class="nav-item">
-                    <span class="nav-link disabled" aria-disabled="true"
-                          title="Модуль у розробці">Форум</span>
-                    {# готово: <a class="nav-link" href="{% url 'forum:thread-list' %}">Форум</a> #}
-                </li>
-
-                {# POL — система опитувань #}
-                <li class="nav-item">
-                    <a class="nav-link{% if '/polls/' in request.path %} active{% endif %}"
-                       href="{% url 'polls:poll_list' %}">Опитування</a>
-                </li>
-
-                {# DIA — електронний щоденник #}
-                <li class="nav-item">
-                    <a class="nav-link{% if '/diary/' in request.path %} active{% endif %}"
-                       href="{% url 'diary:student_list' %}">Щоденник</a>
-                </li>
-
-                {# MAT — матеріали #}
-                <li class="nav-item">
-                    <a class="nav-link{% if '/materials/' in request.path %} active{% endif %}"
-                       href="{% url 'materials:list' %}">Матеріали</a>
-                </li>
-
-                {# POR — портфоліо #}
-                <li class="nav-item">
-                    <span class="nav-link disabled" aria-disabled="true"
-                          title="Модуль у розробці">Портфоліо</span>
-                    {# готово: <a class="nav-link" href="{% url 'portfolio:portfolio-list' %}">Портфоліо</a> #}
-                </li>
-
-                {# GAL — галерея #}
-                <li class="nav-item">
-                    <span class="nav-link disabled" aria-disabled="true"
-                          title="Модуль у розробці">Галерея</span>
-                    {# готово: <a class="nav-link" href="{% url 'gallery:photo-list' %}">Галерея</a> #}
-                </li>
-
-            </ul>
-
-            {# AUTH — система автентифікації #}
-            <ul class="navbar-nav">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link{% if '/accounts/profile' in request.path %} active{% endif %}"
-                           href="{% url 'accounts:profile' %}">{{ user.username }}</a>
-                    </li>
-                    {# вихід лише POST-запитом — GET на /accounts/logout/ повертає 405 #}
-                    <li class="nav-item">
-                        <form method="post" action="{% url 'accounts:logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link btn btn-link">Вийти</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Увійти</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Реєстрація</a></li>
+                    <a href="{% url 'materials:category_list' %}" class="navbar-link">
+                        Категорії
+                    </a>
                 {% endif %}
-            </ul>
+
+                <span class="navbar-user">
+                    {{ user.username }}
+                </span>
+
+                <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="navbar-link">
+                        Вийти
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'login' %}" class="navbar-link">
+                    Увійти
+                </a>
+
+            {% endif %}
 
         </div>
     </div>

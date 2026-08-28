@@ -1,0 +1,81 @@
+{% extends "core/base.html" %}
+
+{% block title %}
+    Видалення категорії
+{% endblock %}
+
+{% block content %}
+
+<div class="container my-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6">
+
+            <div class="card border-danger">
+
+                <div class="card-body">
+
+                    <h1 class="h3 text-danger">
+                        Видалення категорії
+                    </h1>
+
+                    <p>
+                        Ви дійсно хочете видалити категорію
+                        <strong>«{{ object.title }}»</strong>?
+                    </p>
+
+                    {% if object.materials.exists %}
+
+                        <div class="alert alert-warning">
+
+                            Категорію не можна видалити,
+                            оскільки вона містить матеріали.
+
+                            Рекомендується зробити її
+                            неактивною.
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="alert alert-danger">
+
+                            Увага! Категорію буде видалено.
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                        >
+                            Видалити
+                        </button>
+
+                        <a
+                            href="{% url 'materials:category_list' %}"
+                            class="btn btn-secondary"
+                        >
+                            Скасувати
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
