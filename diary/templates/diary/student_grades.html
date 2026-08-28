@@ -1,0 +1,110 @@
+{% extends "core/base.html" %}
+
+{% block title %}Оцінки — {{ student.get_full_name|default:student.username }}{% endblock %}
+
+{% block content %}
+
+<p>
+    <a href="{% url 'diary:student_list' %}" class="btn btn-outline-dark btn-sm">
+        ← До списку учнів
+    </a>
+</p>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+
+    <div>
+        <h1 class="page-title">
+            {{ student.get_full_name|default:student.username }}
+        </h1>
+
+        {% if student.get_full_name %}
+            <p class="text-muted">{{ student.username }}</p>
+        {% endif %}
+    </div>
+
+    {% if can_add_grade %}
+        <a href="{% url 'diary:grade_add' %}?student={{ student.pk }}" class="btn btn-primary">
+            Виставити оцінку
+        </a>
+    {% endif %}
+
+</div>
+
+{% if grades_count %}
+
+    <p class="lead">
+        Загальний середній бал:
+        <strong>{{ total_average|floatformat:1 }}</strong>
+        <span class="text-muted">({{ grades_count }} оцінок)</span>
+    </p>
+
+    <hr>
+
+    {% for item in subjects_with_grades %}
+
+        <section class="mb-4">
+
+            <h2 class="h5">{{ item.subject.title }}</h2>
+
+            <div class="table-responsive">
+
+                <table class="table table-sm align-middle">
+
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 6rem;">Оцінка</th>
+                            <th scope="col" style="width: 10rem;">Дата</th>
+                            <th scope="col">Коментар</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for grade in item.grades %}
+                            <tr>
+                                <td class="text-center">
+                                    <span class="badge text-bg-dark">{{ grade.value }}</span>
+                                </td>
+
+                                <td>{{ grade.created_at|date:"d.m.Y" }}</td>
+
+                                <td>
+                                    {% if grade.comment %}
+                                        {{ grade.comment }}
+                                    {% else %}
+                                        <span class="text-muted">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p>
+                Середній бал: <strong>{{ item.average|floatformat:1 }}</strong>
+            </p>
+
+        </section>
+
+    {% endfor %}
+
+    {% if subjects_without_grades %}
+        <div class="alert alert-light border">
+            Ще немає оцінок з предметів:
+            {% for subject in subjects_without_grades %}
+                {{ subject.title }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% else %}
+
+    <div class="alert alert-info">
+        Цей учень поки не має оцінок.
+    </div>
+
+{% endif %}
+
+{% endblock %}

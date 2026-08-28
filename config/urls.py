@@ -29,19 +29,18 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("diary/", include("diary.urls")),                     # DIA  — електронний щоденник
     # --- Модулі порталу ---
-<<<<<<< HEAD
-    path("", include("core.urls"))                        # HOME — головна сторінка
-    path(% url "home" %)
+
+
     # path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
-=======
+
     path("", include("core.urls")),                            # HOME — головна сторінка
     path("accounts/", include("accounts.urls")),               # AUTH — автентифікація, профілі
->>>>>>> 081585ba8356e8b9aba0e3d0e629e35964e1c551
-    path{% include "forum/includes/latest_threads.html" %}
-    path{% include "polls/includes/active_polls.html" %}
+# >>>>>>> 081585ba8356e8b9aba0e3d0e629e35964e1c551
+    # path{% include "forum/includes/latest_threads.html" %}
+    # path{% include "polls/includes/active_polls.html" %}
     # path("forum/", include("forum.urls")),                     # FOR  — форум
     # path("events/", include("events.urls")),                   # EVE  — події та календар
-    # path("polls/", include("polls.urls")),                     # POL  — опитування
+    path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
     path("materials/", include("materials.urls")),             # MAT  — матеріали

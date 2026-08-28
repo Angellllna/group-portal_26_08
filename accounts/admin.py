@@ -6,6 +6,12 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
+    fieldsets = DjangoUserAdmin.fieldsets + (
+        ("Portal role", {"fields": ("role",)}),
+    )
+    add_fieldsets = DjangoUserAdmin.add_fieldsets + (
+        ("Portal role", {"fields": ("role",)}),
+    )
     list_display = (
         "username",
         "first_name",

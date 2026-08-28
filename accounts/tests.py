@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib import admin
 from django.test import Client
 from django.test import TestCase
 from django.test import override_settings
@@ -250,3 +251,121 @@ class LoginLogoutViewTests(TestCase):
         response = self.client.post(reverse("accounts:logout"))
 
         self.assertRedirects(response, reverse("home"))
+
+
+class ProfileViewTests(TestCase):
+    def setUp(self):
+        self.user_model = get_user_model()
+        self.user = self.user_model.objects.create_user(
+            username="profileuser",
+            first_name="Old",
+            last_name="Name",
+            email="profile@example.com",
+            password="Str0ng!Pass#99",
+            role=self.user_model.Role.MODERATOR,
+        )
+        self.other_user = self.user_model.objects.create_user(
+            username="otheruser",
+            password="Str0ng!Pass#99",
+            role=self.user_model.Role.ADMIN,
+        )
+
+    def test_anonymous_user_cannot_open_private_profile(self):
+        response = self.client.get(reverse("accounts:profile"))
+
+        self.assertRedirects(
+            response,
+            f"{reverse('accounts:login')}?next={reverse('accounts:profile')}",
+        )
+
+    def test_authenticated_user_sees_own_profile(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("accounts:profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "profileuser")
+        self.assertContains(response, "Модератор")
+        self.assertTemplateUsed(response, "accounts/profile_detail.html")
+
+    def test_user_can_update_personal_data(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("accounts:profile-edit"),
+            {
+                "username": "updated-profileuser",
+                "first_name": "New",
+                "last_name": "Surname",
+                "email": "new@example.com",
+            },
+        )
+
+        self.assertRedirects(response, reverse("accounts:profile"))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, "updated-profileuser")
+        self.assertEqual(self.user.first_name, "New")
+        self.assertEqual(self.user.last_name, "Surname")
+        self.assertEqual(self.user.email, "new@example.com")
+        self.assertEqual(self.user.role, self.user_model.Role.MODERATOR)
+
+    def test_profile_form_does_not_allow_role_or_admin_flags(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("accounts:profile-edit"),
+            {
+                "username": "profileuser",
+                "first_name": "New",
+                "last_name": "Surname",
+                "email": "new@example.com",
+                "role": self.user_model.Role.ADMIN,
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+
+        self.assertRedirects(response, reverse("accounts:profile"))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.role, self.user_model.Role.MODERATOR)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+
+    def test_user_cannot_edit_another_profile(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("accounts:profile-edit") + f"?user_id={self.other_user.pk}",
+            {
+                "username": "profileuser",
+                "first_name": "Changed",
+                "last_name": "User",
+                "email": "changed@example.com",
+            },
+        )
+
+        self.assertRedirects(response, reverse("accounts:profile"))
+        self.other_user.refresh_from_db()
+        self.assertNotEqual(self.other_user.first_name, "Changed")
+
+    def test_public_profile_hides_private_data(self):
+        response = self.client.get(
+            reverse("accounts:public-profile", kwargs={"pk": self.user.pk})
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "profileuser")
+        self.assertContains(response, "Модератор")
+        self.assertNotContains(response, self.user.email)
+        self.assertNotContains(response, "is_staff")
+        self.assertTemplateUsed(response, "accounts/public_profile_detail.html")
+
+    def test_admin_user_form_includes_role_field(self):
+        user_admin = admin.site._registry[self.user_model]
+        field_names = {
+            field_name
+            for _, fieldset in user_admin.fieldsets
+            for field_name in fieldset["fields"]
+        }
+
+        self.assertIn("role", field_names)

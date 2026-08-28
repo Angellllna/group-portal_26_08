@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+
+{% block title %}Предмети{% endblock %}
+
+{% block content %}
+
+<p>
+    <a href="{% url 'diary:student_list' %}" class="btn btn-outline-dark btn-sm">
+        ← До щоденника
+    </a>
+</p>
+
+<h1 class="page-title mb-4">Предмети</h1>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+
+    {% for subject in subjects %}
+        <div class="col">
+            <a href="{% url 'diary:subject-detail' subject.pk %}"
+               class="card h-100 text-decoration-none text-reset">
+                <div class="card-body">
+
+                    <h2 class="h5 card-title">{{ subject.title }}</h2>
+
+                    {% if subject.description %}
+                        <p class="card-text text-muted">{{ subject.description }}</p>
+                    {% endif %}
+
+                    <p class="small mb-0">
+                        Оцінок: {{ subject.grades_count }}
+                        {% if subject.average %}
+                            · середній бал {{ subject.average|floatformat:1 }}
+                        {% endif %}
+                    </p>
+
+                </div>
+            </a>
+        </div>
+    {% empty %}
+        <div class="col">
+            <p class="text-muted">Предметів поки немає.</p>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

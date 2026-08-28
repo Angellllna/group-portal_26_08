@@ -24,3 +24,17 @@
 .card-text {
     overflow-wrap: anywhere;
 }
+
+/* Картки розділів порталу (HOME-3) */
+
+.section-card__icon {
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--bs-primary, #0d6efd);
+}
+
+/* картки в ряду однакової висоти: h-100 на .card + кнопка притиснута донизу
+   через mt-auto у .card-body з d-flex flex-column */
+.section-card .card-title {
+    min-height: 2.5rem;
+}
