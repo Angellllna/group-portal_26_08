@@ -1,0 +1,9 @@
+<h1>Підтвердження видалення гілки</h1>
+
+<p>Ви впевнені, що хочете видалити гілку "{{ object.title }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+    <a href="{% url 'forum:thread_detail' object.pk %}">Скасувати</a>
+</form>

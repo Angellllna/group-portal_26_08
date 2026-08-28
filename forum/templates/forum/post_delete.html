@@ -1,0 +1,9 @@
+<h1>Видалити повідомлення</h1>
+
+<p>Ви впевнені, що хочете видалити це повідомлення?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+    <a href="{{ object.thread.get_absolute_url }}">Скасувати</a>
+</form>

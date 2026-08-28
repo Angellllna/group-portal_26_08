@@ -1,49 +1,73 @@
-{% extends "core/base.html" %}
+<h2>Повідомлення</h2>
 
-{% block content %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">Головна</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'forum:home' %}">Форум</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'forum:category_detail' thread.category.slug %}">{{ thread.category.title }}</a></li>
-    <li class="breadcrumb-item active">{{ thread.title }}</li>
-  </ol>
-</nav>
+<ul>
+{% for post in thread.posts.all %}
+    <li>
+        <p>{{ post.content }}</p>
+        <p>Автор: {{ post.author }}</p>
+        <p>Опубліковано: {{ post.created_at }}</p>
 
-<h2>{{ thread.title }}</h2>
-<p class="text-muted">Автор: {{ thread.author }} | Створено: {{ thread.created_at|date:"d.m.Y H:i" }}</p>
-<p>{{ thread.description }}</p>
+        {% if post.edited %}
+            <p><em>(Редаговано)</em></p>
+        {% endif %}
+
+        {% if post.author == request.user or request.user.can_moderate %}
+            <a href="{% url 'forum:post_edit' post.pk %}">Редагувати</a>
+            <a href="{% url 'forum:post_delete' post.pk %}">Видалити</a>
+
+        {% endif %}
+    </li>
+{% empty %}
+    <p>У цій гілці ще немає повідомлень.</p>
+{% endfor %}
+</ul>
+
+</ul>
 
 <hr>
-<h3>Повідомлення</h3>
 
-{% for post in posts %}
-  <div class="card mb-2">
-    <div class="card-body">
-      <p>{{ post.text }}</p>
-      <small class="text-muted">
-        Автор: {{ post.author }} | Опубліковано: {{ post.created_at|date:"d.m.Y H:i" }}
-        {% if post.updated_at > post.created_at %}
-          <em>(редаговано)</em>
-        {% endif %}
-      </small>
-    </div>
-  </div>
-{% empty %}
-  <p>Немає повідомлень.</p>
-{% endfor %}
-
-{% if posts.has_other_pages %}
-<nav>
-  <ul class="pagination">
-    {% if posts.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Назад</a></li>
+{% if not thread.is_closed %}
+    {% if user.is_authenticated %}
+        <h3>Додати повідомлення</h3>
+        <form action="{% url 'forum:post_create' thread.pk %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Надіслати</button>
+        </form>
+    {% else %}
+        <p>Щоб долучитися до обговорення, увійдіть у свій акаунт.</p>
     {% endif %}
-    <li class="page-item disabled"><span class="page-link">Сторінка {{ posts.number }} з {{ posts.paginator.num_pages }}</span></li>
-    {% if posts.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Далі</a></li>
-    {% endif %}
-  </ul>
-</nav>
+{% else %}
+    <p>Гілка закрита. Додавання повідомлень недоступне.</p>
 {% endif %}
-{% endblock %}
+
+{% if request.user.can_moderate %}
+    <a href="{% url 'forum:thread_edit' thread.pk %}">Редагувати гілку</a>
+{% endif %}
+
+{% if request.user.can_moderate %}
+    <a href="{% url 'forum:thread_delete' thread.pk %}">Видалити гілку</a>
+{% endif %}
+
+<h2>Повідомлення</h2>
+
+<ul>
+{% for post in thread.posts.all %}
+    <li>
+        <p>{{ post.content }}</p>
+        <p>Автор: {{ post.author }}</p>
+        <p>Опубліковано: {{ post.created_at }}</p>
+
+        {% if post.edited %}
+            <p><em>(Редаговано)</em></p>
+        {% endif %}
+
+        {% if post.author == request.user or request.user.can_moderate %}
+            <a href="{% url 'forum:post_edit' post.pk %}">Редагувати</a>
+        {% endif %}
+    </li>
+{% empty %}
+    <p>У цій гілці ще немає повідомлень.</p>
+{% endfor %}
+</ul>
+

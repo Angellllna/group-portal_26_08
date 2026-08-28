@@ -1,7 +1,20 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Count, Max
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
+from django.contrib import messages
+
+from accounts.mixins import ModeratorOrAdminRequiredMixin
+
 from .models import ForumCategory, ForumThread, ForumPost
+from .forms import ForumThreadForm, ForumPostForm
+
+
+
+
+
 
 
 class ForumHomeView(ListView):
@@ -51,3 +64,115 @@ class ThreadDetailView(DetailView):
         page = self.request.GET.get('page')
         context['posts'] = paginator.get_page(page)
         return context
+
+
+
+class ForumPostCreateView(LoginRequiredMixin, CreateView):
+    model = ForumPost
+    form_class = ForumPostForm
+    template_name = "forum/post_form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.thread = get_object_or_404(ForumThread, pk=kwargs["pk"])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.thread = self.thread
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.thread.get_absolute_url()
+
+
+
+class ForumThreadUpdateView(
+    ModeratorOrAdminRequiredMixin,
+    UpdateView
+):
+    model = ForumThread
+    form_class = ForumThreadForm
+    template_name = "forum/thread_update.html"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Гілку успішно змінено.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("forum:category_detail", args=[self.object.category.slug])
+
+
+
+class ForumThreadCreateView(
+    ModeratorOrAdminRequiredMixin,
+    CreateView
+):
+    model = ForumThread
+    form_class = ForumThreadForm
+    template_name = "forum/thread_create.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        messages.success(self.request, "Гілку успішно створено.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("forum:category_detail", args=[self.object.category.slug])
+
+
+class ForumThreadDeleteView(
+    ModeratorOrAdminRequiredMixin,
+    DeleteView
+):
+    model = ForumThread
+    template_name = "forum/thread_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse("forum:category_detail", args=[self.object.category.slug])
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Гілку успішно видалено.")
+        return super().delete(request, *args, **kwargs)
+
+class ForumPostUpdateView(LoginRequiredMixin, UpdateView):
+    model = ForumPost
+    fields = ["content"]
+    template_name = "forum/post_update.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            messages.error(request, "У вас немає прав для цієї дії.")
+            return redirect(post.thread.get_absolute_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.edited = True
+        messages.success(self.request, "Повідомлення успішно змінено.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.thread.get_absolute_url()
+
+class ForumPostDeleteView(LoginRequiredMixin, DeleteView):
+    model = ForumPost
+    template_name = "forum/post_delete.html"
+
+    def get_success_url(self):
+        return self.object.thread.get_absolute_url()
+
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+
+        # Автор може видаляти своє повідомлення
+        if post.author == request.user:
+            return super().dispatch(request, *args, **kwargs)
+
+        messages.error(request, "У вас немає прав для цієї дії.")
+        return redirect(post.thread.get_absolute_url())
+
+
+
+
+
+    

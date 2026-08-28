@@ -24,6 +24,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.urls import path, include
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,7 +38,10 @@ urlpatterns = [
     path("polls/", include("polls.urls")),                     # POL  — опитування
     # path("voting/", include("voting.urls")),                   # VOT  — голосування
     # path("announcements/", include("announcements.urls")),     # ANN  — оголошення
-    path("materials/", include("materials.urls")),             # MAT  — матеріали
+    path("materials/", include("materials.urls")), 
+    path("forum/", include("forum.urls", namespace="forum")),
+
+            # MAT  — матеріали
     # path("portfolio/", include("portfolio.urls")),             # POR  — портфоліо
     # path("gallery/", include("gallery.urls")),                 # GAL  — галерея
 ]

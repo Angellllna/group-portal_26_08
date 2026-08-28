@@ -1,0 +1,7 @@
+<h1>Додати повідомлення</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Надіслати</button>
+</form>
